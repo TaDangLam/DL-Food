@@ -1,38 +1,68 @@
-import { User } from "../model/userModel.js";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+import { User } from "../model/userModel.js";
 import middlewareToken from "./jwtService.js";
 
 
 const userService = {
-    createUser: (newUser) => {
-        return new Promise(async(resolve, reject) => {
-            const { name, email, password, confirmPassword, phone } = newUser;
-            try {
-                const checkUser = await User.findOne({email});
-                if(checkUser !== null) {
-                    resolve({
-                        status: "OK",
-                        message: "You had account"
-                    });
-                }
-                const hash = bcrypt.hashSync(password, 10)
-                const createdUser = await User.create({
-                    name, 
-                    email, 
-                    password: hash,
-                    phone
-                })
-                if(createdUser){
-                    resolve({ 
-                        status: "ok",
-                        message: "SUCCESS",
-                        data: createdUser
-                    })
-                }
-            } catch (err) {
-                reject(err);
+    getAllUser: async() => {
+        try {
+            const allUser = await User.find();
+            return {
+                status: 'OK',
+                message: 'Get all user is success',
+                data: allUser
             }
-        });
+        } catch (err) {
+            throw err;
+        }
+    },
+    getDetailUser: async(id) => {
+        try {
+            const checkUser = await User.findById(id);
+            if (!checkUser){
+                return {
+                    status: 'OK',
+                    message: 'User is not define'
+                }
+            }
+            return{
+                status: 'OK',
+                message: 'SUCCESS',
+                data: checkUser
+            }
+        } catch (err) {
+            throw err;
+        }
+    },
+    createUser: async(newUser) => {
+        const { name, email, password, confirmPassword, phone } = newUser;
+        try {
+            const checkUser = await User.findOne({ email });
+            if (checkUser) {
+                return {
+                    status: "OK",
+                    message: "You already have an account"
+                };
+            }
+            const hashed = bcrypt.hashSync(password, 10)
+            const newUserDoc = new User({
+                name,
+                email,
+                password: hashed,
+                confirmPassword: hashed,
+                phone,
+            });
+            const user = await newUserDoc.save();
+            return {
+                status: "OK",
+                message: "CREATED",
+                data: user
+            };
+        } catch (err) {
+            throw err;
+        }
     },
     loginUser: (user) => {
         return new Promise(async(resolve, reject) => {
@@ -46,7 +76,7 @@ const userService = {
                     });
                 }
                 const comparePassword = bcrypt.compareSync(password, checkUser.password);
-                console.log('comparePassword: ',comparePassword);
+                // console.log('comparePassword: ',comparePassword);
                 if(!comparePassword){
                     resolve({
                         status: 'OK',
@@ -77,6 +107,60 @@ const userService = {
             }
         });
     },
+    updateUser: (userId, data) => {
+        return new Promise(async(resolve, reject) => {
+            // const { name, email, password, confirmPassword, phone } = user;
+            try {
+                const checkUser = await User.findById(userId);
+                if(checkUser === null) {
+                    resolve({
+                        status: "OK",
+                        message: "The user is not defined"
+                    });
+                }
+                const updateUser = await User.findByIdAndUpdate(userId, data, { new: true });
+                resolve({
+                    status: 'OK',
+                    message: 'SUCCESS',
+                    data: updateUser
+                })
+            } catch (err) {
+                reject(err);
+            }
+        });
+    },
+    deleteUser: (userId) => {
+        return new Promise(async(resolve, reject) => {
+            try {
+                const checkUser = await User.findById(userId);
+                
+                if(checkUser === null) {
+                    resolve({
+                        status: "OK",
+                        message: "The user is not defined"
+                    });
+                }
+                
+                const updateUser = await User.findByIdAndDelete(userId);
+               
+                resolve({
+                    status: 'OK',
+                    message: 'Deleted User is successfully'
+                })
+            } catch (err) {
+                reject(err);
+            }
+        });
+    },
+    refreshToken: async(token) => {
+        return new Promise(async(resolve, reject) => {
+            try {
+                
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
 };
 
 export default userService;
