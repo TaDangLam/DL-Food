@@ -152,15 +152,6 @@ const userService = {
             }
         });
     },
-    refreshToken: async(token) => {
-        return new Promise(async(resolve, reject) => {
-            try {
-                
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
 };
 
 export default userService;

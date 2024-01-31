@@ -2,6 +2,7 @@ import { StatusCodes} from 'http-status-codes';
 import bcrypt from 'bcrypt';
 
 import userService from "../service/userService.js";
+import middlewareToken from '../service/jwtService.js';
 
 const userController = {
     getAllUser: async(req, res) => {
@@ -88,7 +89,7 @@ const userController = {
             if(!token) {
                 return res.status(StatusCodes.NON_AUTHORITATIVE_INFORMATION).josn({message: 'The Token is required'});
             }
-            const response = await userService.refreshToken(token);
+            const response = await middlewareToken.refreshTokenService(token);
             return res.status(StatusCodes.OK).json(response);
         } catch (err) {
             res.status(StatusCodes.NOT_FOUND).json(err);
