@@ -4,12 +4,8 @@ const statusProduct = ['Stock', 'SoldOut'];
 const optionSizes = ['Small', 'Medium', 'Big'];
 
 const ProductSchema = new mongoose.Schema ({
-    options: [{
-        optionName: { type: String, required: true },
-        optionSize: { type: String, enum: optionSizes, default: 'Small' },
-        optionPrice: { type: Number, required: true }
-    }],
-    images: [{type: mongoose.Schema.Types.ObjectId, ref: 'Images'}],
+    options: {type: mongoose.Schema.Types.ObjectId, ref: 'Option'},
+    images: {type: Array},
     categories: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
     review: {type: mongoose.Schema.Types.ObjectId, ref: 'Review'},
     name: {type: String, required: true},
