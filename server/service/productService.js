@@ -1,16 +1,14 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import cloudinary from 'cloudinary';
+import path from 'path';
+import fs from 'fs';
+import mongoose from 'mongoose';
 
-import middlewareToken from "./jwtService.js";
 import { Product } from '../model/productModel.js';
-import uploadCloud from '../configs/cloundinaryConfig.js';
 
 const productService = {
     getAllProduct: async() => {
         try {
             const allProduct = await Product.find();
-            console.log(allProduct)
+            // console.log(allProduct)
             return {
                 status: 'OK',
                 message: 'Get All Product is Success',
@@ -31,27 +29,21 @@ const productService = {
             throw err;
         }
     },
-    createProduct: async(newProduct, images) => {
+    getProductByCategory: async(cid) => {
         try {
-            const { name, price, title, desc, categoryId, options } = newProduct;
-            const product = await Product.create({
-                name,
-                price,
-                title,
-                desc,
-                images: [], 
-                categoryId, 
-                options
+            const products = await Product.find({ categoryId: cid });
+            return ({
+                status: 'OK',
+                data: products
             })
-
-            // Upload các ảnh lên Cloudinary và lưu URL vào sản phẩm
-            const uploadedImages = await Promise.all(images.map(async (image) => {
-                const result = await cloudinary.v2.uploader.upload(image);
-                return result.secure_url;
-            }));
-
-            // Cập nhật URL của ảnh vào sản phẩm và lưu vào database
-            product.images = uploadedImages;
+        } catch (err) {
+            throw err;
+        }
+    },
+    createProduct: async(newProduct) => {
+        try {
+            const { name, price, title, desc, categoryId, options, images } = newProduct;
+            const product = await Product.create({ name, price, title, desc, categoryId,  options, images: images || [] })
             await product.save();
             return {
                 status: 'OK',
@@ -62,9 +54,42 @@ const productService = {
             throw err;
         }
     },
+    updateProduct: async(pid, newData) => {
+        const { name, price, title, desc, categoryId, options, images } = newData;
+        const product = await Product.findById(pid);
+        if(!product) {
+            return ({ message : 'Product is not found'});
+        }
+
+        // Check và lọc ảnh
+        const existingImages = product.images || [];                                         // ảnh trong database
+        const filterImages = images.filter(newImg => !existingImages.includes(newImg));      // ảnh trong req.body
+        
+        // Cập nhật thông tin sản phẩm
+        product.name = name || product.name;
+        product.price = price || product.price;
+        product.title = title || product.title;
+        product.desc = desc || product.desc;
+        product.categoryId = categoryId || product.categoryId;
+        product.options = options || product.options;
+        product.images.push(...filterImages);
+
+        await product.save();
+        return ({
+            status: 'OK',
+            message: 'Updated Product is Success',
+            data: product
+        })
+    },
     deleteProduct: async(pid) => {
         try {
+            const product = await Product.findById(pid);
+            if (!product) {
+                throw new Error('Product not found');
+            }
             await Product.findByIdAndDelete(pid);
+            const uploadPath = path.join('./public/uploads/', product.name);
+            if(fs.existsSync(uploadPath)) fs.rmSync(uploadPath, { recursive: true });
             return({
                 status: 'OK',
                 message: 'Deleted Product is successfully',
@@ -73,29 +98,6 @@ const productService = {
             throw err;
         }
     },
-    updateProduct: async(pid, newData) => {
-        console.log(pid);
-        const { name, price, title, desc, categoryId, options, images } = newData;
-        const product = await Product.findById(pid);
-        if(!product) {
-            return ({ message : 'Product is not found'});
-        }
-        product.name = name || product.name;
-        product.price = price || product.price;
-        product.title = title || product.title;
-        product.desc = desc || product.desc;
-        product.categoryId = categoryId || product.categoryId;
-        product.options = options || product.options;
-        
-        if (images && images.length > 0) {
-            const uploadedImages = await Promise.all(images.map(async (image) => {
-                const result = await cloudinary.v2.uploader.upload(image);
-                return result.secure_url;
-            }));
-            product.images = uploadedImages;
-        }
-        return await product.save();
-    }
 };
 
 export default productService;

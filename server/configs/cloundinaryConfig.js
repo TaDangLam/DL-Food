@@ -13,8 +13,11 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   allowedFormats: ['jpg', 'png'],
-  params: {
-    folder: 'dl-food'
+  params: (req) => {
+    const cloundName =  req.body.cloundname;
+    return {
+      folder: `dl-food/${cloundName}`
+    } 
   }
 });
 

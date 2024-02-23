@@ -6,7 +6,7 @@ const optionSizes = ['Small', 'Medium', 'Big'];
 const ProductSchema = new mongoose.Schema ({
     options: {type: mongoose.Schema.Types.ObjectId, ref: 'Option'},
     images: {type: Array},
-    categories: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
+    categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
     review: {type: mongoose.Schema.Types.ObjectId, ref: 'Review'},
     name: {type: String, required: true},
     price: {type: Number, required: true},
