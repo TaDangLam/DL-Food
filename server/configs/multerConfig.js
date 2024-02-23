@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
             if(req.body.name !== product.name){
                 const oldUploadPath = path.join('./public/uploads/' + product.name);
                 const newUploadPath = path.join('./public/uploads/' + productName);
-                if (fs.existsSync(oldUploadPath))  fs.renameSync(oldUploadPath, newUploadPath);
+                if (fs.existsSync(oldUploadPath)) fs.renameSync(oldUploadPath, newUploadPath);
             }
         }
 

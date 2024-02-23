@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import mongoose from 'mongoose';
 
 import { Product } from '../model/productModel.js';
 
@@ -62,8 +61,8 @@ const productService = {
         }
 
         // Check và lọc ảnh
-        const existingImages = product.images || [];                                         // ảnh trong database
-        const filterImages = images.filter(newImg => !existingImages.includes(newImg));      // ảnh trong req.body
+        const existingImages = product.images || [];                                                                       // ảnh trong database
+        const filterImages = Array.isArray(images) ? images.filter(newImg => !product.images.includes(newImg)) : [];      // ảnh trong req.body
         
         // Cập nhật thông tin sản phẩm
         product.name = name || product.name;
@@ -74,7 +73,7 @@ const productService = {
         product.options = options || product.options;
         product.images.push(...filterImages);
 
-        await product.save();
+        await product.save()
         return ({
             status: 'OK',
             message: 'Updated Product is Success',
