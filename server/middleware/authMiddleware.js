@@ -22,7 +22,7 @@ const authMiddleWare = (req, res, next) => {
         }
         const { payload } = user;
 
-        if(payload?.role === 'admin' || payload.id === userId) {
+        if(payload?.role === 'admin' || payload.id === userId || payload?.role === 'staff') {
             next();
         }else {
             return res.status(StatusCodes.NOT_FOUND).json({

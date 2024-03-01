@@ -7,16 +7,16 @@ const CategoryController = {
             const { name } = req.body;
             const response = await categoryService.addCategory(req.body);
             res.status(StatusCodes.OK).json(response);
-        } catch (err) {
-            res.status(StatusCodes.NOT_FOUND).json(err);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
     getAllCategory: async(req, res) => {
         try {
             const response = await categoryService.getAllCateogry();
             res.status(StatusCodes.OK).json(response);            
-        } catch (err) {
-            res.status(StatusCodes.NOT_FOUND).json(err)
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
     updateCategory: async(req, res) => {
@@ -28,8 +28,8 @@ const CategoryController = {
             }
             const response = await categoryService.updateCategory(name, cid);
             res.status(StatusCodes.OK).json(response);
-        } catch (err) {
-            res.status(StatusCodes.NOT_FOUND).json(err)
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
     deleteCategory: async(req, res) => {
@@ -37,8 +37,8 @@ const CategoryController = {
         try {
             const response = await categoryService.deleteCategory(cid)
             res.status(StatusCodes.OK).json(response);            
-        } catch (err) {
-            res.status(StatusCodes.NOT_FOUND).json(err)
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     }
 }

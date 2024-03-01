@@ -10,8 +10,8 @@ const categoryService = {
                 message: 'Add New Category is Successfully',
                 data: newCategory
             }
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
     getAllCateogry: async() => {
@@ -22,8 +22,8 @@ const categoryService = {
                 message: 'Get All Category Success',
                 data: cate
             }
-        } catch (err) {
-            throw err
+        } catch (erroror) {
+            throw new Error(error.message);
         }
     },
     updateCategory: async(name, cid) => {
@@ -34,8 +34,8 @@ const categoryService = {
                 message: 'Update Category is Success',
                 data: cate
             }
-        } catch (err) {
-            throw err
+        } catch (error) {
+            throw new Error(error.message);
         }
     },
     deleteCategory: async(cid) => {
@@ -45,8 +45,8 @@ const categoryService = {
                 status: 'OK',
                 message: 'Category is Deleted'
             }
-        } catch (err) {
-            throw err
+        } catch (error) {
+            throw new Error(error.message);
         }
     }
 };

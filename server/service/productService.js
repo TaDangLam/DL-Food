@@ -4,17 +4,20 @@ import fs from 'fs';
 import { Product } from '../model/productModel.js';
 
 const productService = {
-    getAllProduct: async() => {
+    getAllProduct: async(limit , page ) => {
         try {
-            const allProduct = await Product.find();
-            // console.log(allProduct)
+            const totalProduct = await Product.countDocuments();
+            const allProduct = await Product.find().limit(limit).skip(page * limit);    // default maybe page = 0
             return {
                 status: 'OK',
                 message: 'Get All Product is Success',
-                data: allProduct
+                data: allProduct,
+                totalProduct: totalProduct,
+                pageCurrent: Number(page + 1),
+                totalPage: Math.ceil(totalProduct / limit),
             }
-        } catch (err) {
-            throw err
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
     getDetailProduct: async(pid) => {
@@ -24,8 +27,8 @@ const productService = {
                 status: 'OK',
                 data: product
             })
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
     getProductByCategory: async(cid) => {
@@ -35,8 +38,8 @@ const productService = {
                 status: 'OK',
                 data: products
             })
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
     createProduct: async(newProduct) => {
@@ -49,8 +52,8 @@ const productService = {
                 message: 'Product is create Successfully',
                 data: product
             };
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
     updateProduct: async(pid, newData) => {
@@ -93,8 +96,8 @@ const productService = {
                 status: 'OK',
                 message: 'Deleted Product is successfully',
             });
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);;
         }
     },
 };

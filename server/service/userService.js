@@ -40,6 +40,7 @@ const userService = {
         const { name, email, password, confirmPassword, phone } = newUser;
         try {
             const checkUser = await User.findOne({ email });
+            // console.log(checkUser)
             if (checkUser) {
                 return {
                     status: "OK",
