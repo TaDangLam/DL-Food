@@ -5,7 +5,13 @@ import addressService from '../service/addressService.js';
 const AddressController = {
     getAllAddress: async(req, res) => {
         try {
-            const response = await addressService.getAllAddress();
+            const userId = req.user.payload.id;
+            // console.log("req: ", req);
+            // console.log("------------------------------------------------------------------");
+            // console.log("req.user: ", req.user);
+            // console.log("------------------------------------------------------------------");
+            // console.log("userId: ", userId);
+            const response = await addressService.getAllAddress(userId);
             res.status(StatusCodes.OK).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
@@ -13,11 +19,12 @@ const AddressController = {
     },
     addAddress: async(req, res) => {
         try {
+            const userId = req.user.payload.id;
             const { street, city, province } = req.body;
             if( !street || !city || !province ) {
                 return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please input all required fields in Address' });
             }
-            const response = await addressService.addAddress(req.body);
+            const response = await addressService.addAddress(userId, req.body);
             res.status(StatusCodes.CREATED).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });

@@ -4,8 +4,11 @@ const Router = express.Router();
 import OrderController from '../controllers/OrderController.js';
 import authMiddleWare from '../middleware/authMiddleware.js'
 
-Router.get('/get-all-order', authMiddleWare, OrderController.getAllOrder);
-Router.post('/create-order', authMiddleWare, OrderController.createOrder);
-Router.get('/get-order-detail', authMiddleWare, OrderController.getAllOrder);
+Router.get('/get-all-order', authMiddleWare.verifyTokenAdmin, OrderController.getAllOrder);
+Router.get('/get-all-order-user', authMiddleWare.verifyCustomer, OrderController.getAllOrderForUser);
+Router.post('/create-order', authMiddleWare.verifyCustomer, OrderController.createOrder);
+Router.get('/get-detail-order/:oid', authMiddleWare.verifyCustomer, OrderController.getDetailOrder);
+Router.patch('/update-order/:oid', authMiddleWare.verifyCustomer, OrderController.updateOrder);
+Router.delete('/delete-order/:oid', authMiddleWare.verifyTokenStaff, OrderController.deleteOrder)
 
 export const OrderRoute = Router;

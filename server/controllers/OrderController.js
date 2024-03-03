@@ -10,6 +10,24 @@ const OrderController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    getAllOrderForUser: async(req, res) => {
+        try {
+            const userId = req.user.payload.id;
+            const response = await orderService.getAllOrderForUser(userId);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    getDetailOrder: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const response = await orderService.getDetailOrder(oid);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     createOrder: async(req, res) => {
         try {
             const { orderBy, paymentType, totalPrice, orderDetail, address } = req.body;
@@ -18,6 +36,24 @@ const OrderController = {
             }
             const newOrder = await orderService.createOrder(req.body);
             res.status(StatusCodes.CREATED).json(newOrder)
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    updateOrder: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const response = await orderService.updateOrder(oid, req.body);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    deleteOrder: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const response = await orderService.deleteOrder(oid);
+            res.status(StatusCodes.OK).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }

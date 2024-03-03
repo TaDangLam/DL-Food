@@ -69,7 +69,7 @@ const userService = {
         return new Promise(async(resolve, reject) => {
             const { name, email, password, confirmPassword, phone } = user;
             try {
-                const checkUser = await User.findOne({email});
+                const checkUser = await User.findOne({email}).populate('address');
                 if(checkUser === null) {
                     resolve({
                         status: "OK",

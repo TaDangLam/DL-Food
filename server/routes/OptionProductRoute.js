@@ -1,6 +1,8 @@
 import express from 'express';
 const Router = express.Router();
 
-Router.get('/', );
+Router.get('/', (req, res) => {
+    res.send('/aaa');
+});
 
 export const OptionRoute = Router;
