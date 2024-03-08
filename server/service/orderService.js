@@ -19,9 +19,9 @@ const orderService = {
     getAllOrderForUser: async(userId) => {
         try {
             const order = await Order.find({ orderBy: userId })
-            .populate({path: 'paymentType', select: '_id name'})
-            .populate({path: 'address', select: '_id street city province'})
-            .populate('orderDetail.productId');
+                .populate({path: 'paymentType', select: '_id name'})
+                .populate({path: 'address', select: '_id street city province'})
+                .populate('orderDetail.productId');
             return ({
                 status: 'OK',
                 data: order
@@ -37,6 +37,51 @@ const orderService = {
             status: 'OK',
             data: order
            }) 
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    getAllProcessingOrder: async() => {
+        try {
+            const orders = await Order.find({ status: 'Processing' })
+                .populate({path: 'orderBy', select: '_id name email phone'})
+                .populate({path: 'paymentType', select: '_id name'})
+                .populate({path: 'address', select: '_id street city province'})
+                .populate('orderDetail.productId');
+            return ({
+                status: 'OK',
+                data: orders
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    getAllDeliveredOrder: async() => {
+        try {
+            const orders = await Order.find({ status: 'Delivered' })
+                .populate({path: 'orderBy', select: '_id name email phone'})
+                .populate({path: 'paymentType', select: '_id name'})
+                .populate({path: 'address', select: '_id street city province'})
+                .populate('orderDetail.productId');
+            return ({
+                status: 'OK',
+                data: orders
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    getAllCancelledOrder: async() => {
+        try {
+            const orders = await Order.find({ status: 'Cancled' })
+                .populate({path: 'orderBy', select: '_id name email phone'})
+                .populate({path: 'paymentType', select: '_id name'})
+                .populate({path: 'address', select: '_id street city province'})
+                .populate('orderDetail.productId');
+            return ({
+                status: 'OK',
+                data: orders
+            });
         } catch (error) {
             throw new Error(error.message);
         }
@@ -72,6 +117,57 @@ const orderService = {
             return ({
                 status: 'OK',
                 message: 'Update Order is Success',
+                data: newOrder
+            })
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    updateStatusToProcessing: async(oid, newData) => {
+        try {
+            const oldOrder = await Order.findById(oid);
+            if(!oldOrder) {
+                throw new Error('Order is not found');
+            }
+            oldOrder.status = newData;
+            const newOrder = await oldOrder.save();
+            return({
+                status: 'OK',
+                message: 'Update Status is Successfully',
+                data: newOrder
+            })
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    updateStatusToDeliverd: async(oid, newData) => {
+        try {
+            const oldOrder = await Order.findById(oid);
+            if(!oldOrder) {
+                throw new Error('Order is not found');
+            }
+            oldOrder.status = newData;
+            const newOrder = await oldOrder.save();
+            return({
+                status: 'OK',
+                message: 'Update Status is Successfully',
+                data: newOrder
+            })
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    updateStatusToCancel: async(oid, newData) => {
+        try {
+            const oldOrder = await Order.findById(oid);
+            if(!oldOrder) {
+                throw new Error('Order is not found');
+            }
+            oldOrder.status = newData;
+            const newOrder = await oldOrder.save();
+            return({
+                status: 'OK',
+                message: 'Update Status is Successfully',
                 data: newOrder
             })
         } catch (error) {

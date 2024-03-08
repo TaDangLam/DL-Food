@@ -12,6 +12,15 @@ const productController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    searchProduct: async(req, res) => {
+        try {
+            const { keyword } = req.query;
+            const response = await productService.searchProduct(keyword);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     getDetailProduct: async(req, res) => {
         try {
             const { pid } = req.params;
@@ -47,7 +56,16 @@ const productController = {
             const { pid } = req.params;
             const newData = req.body;
             const updateProduct = await productService.updateProduct(pid, newData);
-            res.status(StatusCodes.OK).json(updateProduct)
+            res.status(StatusCodes.OK).json(updateProduct);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    updateStatusProduct: async(req, res) => {
+        try {
+            const { pid } = req.params;
+            const resposne = await productService.updateStatusProduct(pid);
+            res.status(StatusCodes.OK).json(resposne);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }

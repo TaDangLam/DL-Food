@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const statusOrder = ['Pending', 'Processing', 'Delivered'];
+const statusOrder = ['Pending', 'Processing', 'Delivered', 'Cancel'];
 
 const OrderSchema = new mongoose.Schema ({
     orderBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},

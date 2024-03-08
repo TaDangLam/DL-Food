@@ -28,6 +28,30 @@ const OrderController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    getAllProcessingOrder: async(req, res) => {
+        try {
+            const response = await orderService.getAllProcessingOrder();
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    getAllDeliveredOrder: async(req, res) => {
+        try {
+            const response = await orderService.getAllDeliveredOrder();
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    getAllCancelledOrder: async(req, res) => {
+        try {
+            const response = await orderService.getAllCancelledOrder();
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     createOrder: async(req, res) => {
         try {
             const { orderBy, paymentType, totalPrice, orderDetail, address } = req.body;
@@ -44,6 +68,36 @@ const OrderController = {
         try {
             const { oid } = req.params;
             const response = await orderService.updateOrder(oid, req.body);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    updateStatusToProcessing: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const data = "Processing"
+            const response = await orderService.updateStatusToProcessing(oid, data);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    updateStatusToDeliverd: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const data = "Delivered"
+            const response = await orderService.updateStatusToDeliverd(oid, data);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
+    updateStatusToCancel: async(req, res) => {
+        try {
+            const { oid } = req.params;
+            const data = "Cancel"
+            const response = await orderService.updateStatusToCancel(oid, data);
             res.status(StatusCodes.OK).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
