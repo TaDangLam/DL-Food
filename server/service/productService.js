@@ -64,6 +64,20 @@ const productService = {
             throw new Error(error.message);
         }
     },
+    getFewProductByCategory: async(cid) => {
+        try {
+            const products = await Product.find({ categoryId: cid })
+                                                .limit(4)
+                                                .populate('categoryId')
+                                                .populate('reviewId');
+            return ({
+                status: 'OK',
+                data: products
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
     createProduct: async(newProduct) => {
         try {
             const { name, price, title, desc, categoryId, options, images } = newProduct;

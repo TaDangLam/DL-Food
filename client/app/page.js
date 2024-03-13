@@ -1,20 +1,71 @@
+'use client'
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoStar } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
+import { PiHamburger, PiForkKnifeLight  } from "react-icons/pi";
+import { LiaPizzaSliceSolid } from "react-icons/lia";
+import { BsCupHot } from "react-icons/bs";
+import { LuSoup, LuSalad  } from "react-icons/lu";
+import { CiShoppingCart } from "react-icons/ci";
+
+import { fetchAllCategory, getProductCategory } from "./api/route";
 
 export default function Home() {
+  const [category, setCategory] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [products, setProduct ] = useState([]);
+
+  useEffect(() => {
+    fetchAllCategory()
+      .then(result => setCategory(result.data))
+      .catch(error => console.log(error));
+    
+    getCateClick(process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID);
+  }, []);
+
+  const getCateClick = async(cid) => {
+    getProductCategory(cid)
+      .then(result => setProduct(result.data))
+      .catch(error => console.log(error));
+    setSelectedCategoryId(cid);
+  }
+  
+  const getIconCate = (name) => {
+    switch (name) {
+      case 'BURGER':
+          return <PiHamburger className="h-14 w-14"/>;
+      case 'PIZZA':
+          return <LiaPizzaSliceSolid className="h-14 w-14" />;
+      case 'DRINKS':
+          return <BsCupHot className="h-14 w-14" />;
+      case 'PASTA':
+              return <PiForkKnifeLight className="h-14 w-14" />;
+      case 'SOUP':
+              return <LuSoup className="h-14 w-14" />;        
+      case 'SALAD':
+          return <LuSalad className="h-14 w-14" />;
+      // Thêm các trường hợp khác tương ứng với biểu tượng của danh mục
+      default:
+          return null;
+    }
+  }
+
+  // console.log(category)
+  // console.log(products);
+  // console.log(selectedCategoryId);
   return (
     <div className="margin-component mt-[31px] h-full">
-      <div className=" w-full h-1/6 relative">
+      <div className=" w-full h-1/4 relative">
           <img src="/468702ee8eea3bb4d92aaa06d9b1e923.jpg" alt="Background images" className=" w-full object-cover rounded-xl"/>
           <div className="">
             <div className="absolute top-1/4 left-40 text-9xl text-[#ffc139] font-semibold">Food</div>
             <div className="absolute top-[350px] left-1/4 text-6xl text-white  font-medium">D E L I V E R Y</div>
-            <Link href="/" className="text-white hover:text-[#ffc139] font-medium"><div className="absolute top-2/4 left-1/4 bg-[#ffc139] hover:bg-white p-4 px-14 rounded-3xl">ORDER NOW</div></Link>
+            <Link href="/category" className="text-white hover:text-[#ffc139] font-medium duration-500"><div className="absolute top-2/4 left-1/4 bg-[#ffc139] hover:bg-white p-4 px-14 rounded-3xl">ORDER NOW</div></Link>
           </div>
       </div>
 
-      <div className="flex h-1/6 w-full pt-16">
+      <div className="flex h-1/4 w-full pt-16">
         <div className=" w-1/2">
           <img src="Untitled-1.webp"/>
         </div>
@@ -35,7 +86,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex gap-10 h-1/6 w-full pt-10">
+      <div className="flex gap-10 h-1/4 w-full pt-10">
         <div className="flex flex-col gap-8 p-5 h-full w-1/3">
           <div className="text-5xl font-medium w-full">
             BEEF CLASSIC <span className="text-[#ffc139]">BURGERS</span> 
@@ -44,7 +95,7 @@ export default function Home() {
             Try this delicious burger containing of two fried parts of a whole-grain bun, a juicy piece of beef, cheese and lettuce
           </div>
           <div className="w-full">
-            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139]"><FaPlus className="text-xl"/></Link>
+            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
           </div>
           <div className="w-full">
             <img src="/Untitled-2.webp"/>
@@ -62,7 +113,7 @@ export default function Home() {
               Our pasta with seafood is mixed perfectly with a glass of white wine
             </div>
             <div className="w-full">
-              <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139]"><FaPlus className="text-xl"/></Link>
+              <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
             </div>
         </div>
 
@@ -74,7 +125,7 @@ export default function Home() {
             We offer you a special dish – our season soup containing season vegetables
           </div>
           <div className="w-full">
-            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139]"><FaPlus className="text-xl"/></Link>
+            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
           </div>
           <div className="w-full">
             <img src="/Untitled-4.webp"/>
@@ -83,9 +134,33 @@ export default function Home() {
 
       </div>
 
-      <div className="h-1/6">d</div>
-      <div className="h-1/6">d</div>
-      <div className="h-1/6">d</div>
+      <div className="h-1/4 w-full pt-14">
+        <div className="flex w-full h-1/3 p-5 ">
+            {category.map(cate => (
+              <div key={cate._id} className="flex flex-col items-center gap-3 w-2/12 h-full cursor-pointer hover:text-[#ffc139] duration-200" onClick={() => getCateClick(cate._id)}>{getIconCate(cate.name)} <span className="text-lg ">{cate.name}</span></div>
+            ))}
+        </div>
+        <div className="flex gap-4 w-full h-2/3 p-5 pt-10 ">
+          {selectedCategoryId && products.map(product => (
+            <div 
+              key={product._id} 
+              className="flex flex-col gap-5 w-1/4 p-6 border border-[#d4d4d4]"
+            >
+              <Link className="w-full h-4/6 transition-opacity duration-300 hover:opacity-75" href={'/'}>
+                <img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${product.name}/${product.images[0]}`} 
+                      alt="images product" 
+                      className="w-full h-full object-cover"/>
+              </Link>
+              <div className="w-full h-1/6 text-lg font-medium">{product.name}</div>
+              <div className="flex items-center justify-between w-full h-1/6 text-[#ffc139] text-xl font-semibold">
+                <div className="text-2xl">$ {product.price}</div>
+                <Link href={'/cart'} className="flex bg-[#ffc139] p-3 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><CiShoppingCart className=""/></Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   );
 }

@@ -40,7 +40,7 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className="w-1/2 p-4">
-                        <Link href={'/auth/login'} className="flex items-center justify-center gap-2 hover:text-[#ffc139] font-semibold">
+                        <Link href={'/auth'} className="flex items-center justify-center gap-2 hover:text-[#ffc139] font-semibold">
                             <FaUserAlt /> Login
                         </Link>
                     </div>

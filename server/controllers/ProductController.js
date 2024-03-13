@@ -39,6 +39,15 @@ const productController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    getFewProductByCategory: async(req, res) => {
+        try {
+            const { cid } = req.params;
+            const response = await productService.getFewProductByCategory(cid);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     createProduct: async(req, res) => {
         try {
             const { name, price, title, desc, categoryId, options, images } = req.body;
