@@ -1,11 +1,14 @@
 import axios from "axios";
 
+import { setCategory } from "@/lib/features/category/categorySlice";
+import { setProductByCategory, setAllProductByCategory } from "@/lib/features/product/productSlice";
+
 const baseUrl = process.env.NEXT_PUBLIC_API_BACKEND;
 
-export const fetchAllCategory = async() => {
+export const fetchAllCategory = async(dispatch) => {
     try {
         const response = await axios.get(`${baseUrl}/category`);
-        return response.data;
+        dispatch(setCategory(response.data.data));
     } catch (error) {
         console.log('Error fetching product data: ', error);
         throw error;
@@ -42,10 +45,20 @@ export const deleteCategory = async(cid) => {
     }
 }
 
-export const getProductCategory = async(cid) => {
+export const getProductCategory = async(cid, dispatch) => {
     try {
         const response = await axios.get(`${baseUrl}/product/getFew-product-cate/${cid}`);
-        return response.data;
+        dispatch(setProductByCategory(response.data.data));
+    } catch (error) {
+        console.log('Error fetching product data: ', error);
+        throw error;
+    }
+}
+
+export const getAllProductByCategory = async(cid, dispatch) => {
+    try {
+        const response = await axios.get(`${baseUrl}/product/getAll-product-cate/${cid}`);
+        dispatch(setAllProductByCategory(response.data.data));
     } catch (error) {
         console.log('Error fetching product data: ', error);
         throw error;

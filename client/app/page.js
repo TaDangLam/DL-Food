@@ -10,23 +10,27 @@ import { LuSoup, LuSalad  } from "react-icons/lu";
 import { CiShoppingCart } from "react-icons/ci";
 
 import { fetchAllCategory, getProductCategory } from "./api/route";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Home() {
-  const [category, setCategory] = useState([]);
+  const category = useSelector((state) => state.category.categories);
+  const products = useSelector((state) => state.product.fewProducts);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [products, setProduct ] = useState([]);
+  // const [products, setProduct ] = useState([]);
+  const dispatch = useDispatch();
+  const idCategory = process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID;
 
   useEffect(() => {
-    fetchAllCategory()
-      .then(result => setCategory(result.data))
+    fetchAllCategory(dispatch)
+      // .then(result => setCategory(result.data))
       .catch(error => console.log(error));
     
-    getCateClick(process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID);
+    getCateClick(idCategory);
   }, []);
 
   const getCateClick = async(cid) => {
-    getProductCategory(cid)
-      .then(result => setProduct(result.data))
+    getProductCategory(cid, dispatch)
+      // .then(result => setProduct(result.data))
       .catch(error => console.log(error));
     setSelectedCategoryId(cid);
   }
@@ -45,11 +49,10 @@ export default function Home() {
               return <LuSoup className="h-14 w-14" />;        
       case 'SALAD':
           return <LuSalad className="h-14 w-14" />;
-      // Thêm các trường hợp khác tương ứng với biểu tượng của danh mục
       default:
           return null;
     }
-  }
+  };
 
   // console.log(category)
   // console.log(products);
@@ -61,7 +64,7 @@ export default function Home() {
           <div className="">
             <div className="absolute top-1/4 left-40 text-9xl text-[#ffc139] font-semibold">Food</div>
             <div className="absolute top-[350px] left-1/4 text-6xl text-white  font-medium">D E L I V E R Y</div>
-            <Link href="/category" className="text-white hover:text-[#ffc139] font-medium duration-500"><div className="absolute top-2/4 left-1/4 bg-[#ffc139] hover:bg-white p-4 px-14 rounded-3xl">ORDER NOW</div></Link>
+            <Link href={`/category/${idCategory}`} className="text-white hover:text-[#ffc139] font-medium duration-500"><div className="absolute top-2/4 left-1/4 bg-[#ffc139] hover:bg-white p-4 px-14 rounded-3xl">ORDER NOW</div></Link>
           </div>
       </div>
 
@@ -95,7 +98,7 @@ export default function Home() {
             Try this delicious burger containing of two fried parts of a whole-grain bun, a juicy piece of beef, cheese and lettuce
           </div>
           <div className="w-full">
-            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
+            <Link href={`/`} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
           </div>
           <div className="w-full">
             <img src="/Untitled-2.webp"/>
@@ -141,7 +144,7 @@ export default function Home() {
             ))}
         </div>
         <div className="flex gap-4 w-full h-2/3 p-5 pt-10 ">
-          {selectedCategoryId && products.map(product => (
+          {selectedCategoryId && products?.map(product => (
             <div 
               key={product._id} 
               className="flex flex-col gap-5 w-1/4 p-6 border border-[#d4d4d4]"
