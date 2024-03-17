@@ -9,6 +9,7 @@ import { BsCupHot } from "react-icons/bs";
 import { LuSoup, LuSalad  } from "react-icons/lu";
 import { CiShoppingCart } from "react-icons/ci";
 
+
 import { fetchAllCategory, getProductCategory } from "./api/route";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,6 +20,8 @@ export default function Home() {
   // const [products, setProduct ] = useState([]);
   const dispatch = useDispatch();
   const idCategory = process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID;
+  const user = useSelector(state => state.auth.user);
+  console.table(user)
 
   useEffect(() => {
     fetchAllCategory(dispatch)
@@ -54,7 +57,6 @@ export default function Home() {
     }
   };
 
-  // console.log(category)
   // console.log(products);
   // console.log(selectedCategoryId);
   return (
@@ -98,7 +100,7 @@ export default function Home() {
             Try this delicious burger containing of two fried parts of a whole-grain bun, a juicy piece of beef, cheese and lettuce
           </div>
           <div className="w-full">
-            <Link href={`/`} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
+            <Link href={`/category/65f04a1c81da17e4da645807`} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
           </div>
           <div className="w-full">
             <img src="/Untitled-2.webp"/>
@@ -116,7 +118,7 @@ export default function Home() {
               Our pasta with seafood is mixed perfectly with a glass of white wine
             </div>
             <div className="w-full">
-              <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
+              <Link href={'/category/65f04de981da17e4da645813'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
             </div>
         </div>
 
@@ -128,7 +130,7 @@ export default function Home() {
             We offer you a special dish – our season soup containing season vegetables
           </div>
           <div className="w-full">
-            <Link href={'/'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
+            <Link href={'/category/65f04ded81da17e4da645815'} className="flex bg-[#ffc139] p-5 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><FaPlus className="text-xl"/></Link>
           </div>
           <div className="w-full">
             <img src="/Untitled-4.webp"/>
@@ -147,9 +149,9 @@ export default function Home() {
           {selectedCategoryId && products?.map(product => (
             <div 
               key={product._id} 
-              className="flex flex-col gap-5 w-1/4 p-6 border border-[#d4d4d4]"
+              className="flex flex-col gap-5 w-1/4 p-6 border border-[#d4d4d4] hover:shadow-xl"
             >
-              <Link className="w-full h-4/6 transition-opacity duration-300 hover:opacity-75" href={'/'}>
+              <Link className="w-full h-4/6 transition-opacity duration-300 hover:opacity-75" href={`/productdetail/${product._id}`}>
                 <img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${product.name}/${product.images[0]}`} 
                       alt="images product" 
                       className="w-full h-full object-cover"/>

@@ -65,24 +65,17 @@ const userService = {
             throw err;
         }
     },
-    loginUser: (user) => {
-        return new Promise(async(resolve, reject) => {
-            const { name, email, password, confirmPassword, phone } = user;
+    loginUser: async(user) => {
+        const { name,  password } = user;
             try {
-                const checkUser = await User.findOne({email}).populate('address');
+                const checkUser = await User.findOne({name}).populate('address');
                 if(checkUser === null) {
-                    resolve({
-                        status: "OK",
-                        message: "The user is not defined"
-                    });
+                    throw new Error('User is not exist');
                 }
                 const comparePassword = bcrypt.compareSync(password, checkUser.password);
                 // console.log('comparePassword: ',comparePassword);
                 if(!comparePassword){
-                    resolve({
-                        status: 'OK',
-                        message: 'The Password is incorrect'
-                    })
+                    throw new Error('Password is not incorrect');
                 }
                 
                 // create AccessToken
@@ -95,18 +88,23 @@ const userService = {
                     id: checkUser._id,
                     role: checkUser.role
                 })
+
+                const userWithoutPassword = {
+                    ...checkUser._doc,
+                    password: undefined,
+                    confirmPassword: undefined,
+                };
                 
-                resolve({
+                return({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: checkUser,
+                    data: userWithoutPassword,
                     accessToken,
                     refreshToken,
                 })
-            } catch (err) {
-                reject(err);
+            } catch (error) {
+                throw new Error(error.message);
             }
-        });
     },
     updateUser: (userId, data) => {
         return new Promise(async(resolve, reject) => {

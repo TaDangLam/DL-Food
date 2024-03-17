@@ -37,6 +37,17 @@ const reviewService = {
             throw new Error(error.message);
         }
     },
+    getDetailReview: async(id) => {
+        try {
+            const response = await Review.findById(id);
+            return ({
+                status: 'OK',
+                data: response
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
     createReponseText: async(id, userIDResponse, textResponse) => {
         try {
             const originalReview = await Review.findById(id);

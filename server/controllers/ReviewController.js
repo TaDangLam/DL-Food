@@ -11,6 +11,15 @@ const ReviewController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    getDetailReview: async(req, res) => {
+        try {
+            const { id } = req.params;
+            const response = await reviewService.getDetailReview(id);
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     createReponseText: async(req, res) => {
         try {
             const { id } = req.params;

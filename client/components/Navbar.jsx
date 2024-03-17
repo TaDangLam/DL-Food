@@ -40,7 +40,7 @@ const Navbar = ({ id }) => {
                 <Link 
                     key={cate._id}
                     href={`/category/${cate._id}`} 
-                    className={`flex items-center gap-10 px-5 py-2 bg-[#f4f6f3] hover:text-[#ffc139] hover:shadow-lg duration-300 ${id === cate._id ? 'text-white bg-[#ffc139] shadow-lg' : ''}`} 
+                    className={`flex items-center gap-10 px-5 py-2 hover:shadow-lg duration-300 ${id === cate._id ? 'text-white bg-[#ffc139] shadow-lg' : 'bg-[#f4f6f3] hover:text-[#ffc139]'}`} 
                     
                 >
                         {getIconCate(cate.name)} <span className="text-xl font-medium ">{cate.name}</span>

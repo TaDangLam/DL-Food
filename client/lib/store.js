@@ -11,8 +11,9 @@ import {
     REGISTER,
   } from 'redux-persist'
 
-import cateReducer from '@/lib/features/category/categorySlice'
-import productReducer from '@/lib/features/product/productSlice'
+import cateReducer from '@/lib/features/category/categorySlice';
+import productReducer from '@/lib/features/product/productSlice';
+import authReducer from '@/lib/features/user/authSlice';
 
 const persistConfig = {
     key: 'root',
@@ -22,7 +23,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({ 
   category: cateReducer,
-  product: productReducer
+  product: productReducer,
+  auth: authReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

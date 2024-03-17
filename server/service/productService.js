@@ -42,7 +42,13 @@ const productService = {
         try {
             const product = await Product.findById(pid)
                 .populate('categoryId')
-                .populate('reviewId');
+                .populate({
+                    path: 'reviewId',
+                    populate: {
+                        path: 'userID',
+                        model: 'User'
+                    }
+                })
             return ({
                 status: 'OK',
                 data: product
