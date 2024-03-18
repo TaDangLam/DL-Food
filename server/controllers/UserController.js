@@ -22,19 +22,19 @@ const userController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }  
     },
-    createUser: async(req, res) => {
+    register: async(req, res) => {
         try {
            const { name, email, password, confirmPassword, phone } = req.body;
             const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
             const checkMail = regex.test(email);
             if(!name || !email || !password || !confirmPassword || !phone){
-                return res.status(StatusCodes.BAD_REQUEST).json({message: 'Please complete all information'});
+                return res.status(StatusCodes.BAD_REQUEST).json({error: 'Please complete all information'});
             } else if (!checkMail) {
-                return res.status(StatusCodes.BAD_REQUEST).json({message: 'Email is not valid'})
+                return res.status(StatusCodes.BAD_REQUEST).json({error: 'Email is not valid'})
             } else if (password !== confirmPassword) {
-                return res.status(StatusCodes.BAD_REQUEST).json({message: 'Password and confirmPassword is not match'})
+                return res.status(StatusCodes.BAD_REQUEST).json({error: 'Password and confirmPassword is not match'})
             }
-            const response = await userService.createUser(req.body);
+            const response = await userService.register(req.body);
             res.status(StatusCodes.CREATED).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });

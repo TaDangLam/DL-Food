@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { setCategory } from "@/lib/features/category/categorySlice";
 import { setProductByCategory, setAllProductByCategory, setAllProductById } from "@/lib/features/product/productSlice";
-import { Login, Logout } from '@/lib/features/user/authSlice'
+import { Login, Logout, Register } from '@/lib/features/user/authSlice'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BACKEND;
 
@@ -101,6 +101,23 @@ export const login = async(username, password, dispatch) => {
         dispatch(Login(response.data.data));
     } catch (error) {
         console.log('Login error: ', error);
+        throw error;
+    }
+}
+
+export const register = async(newUser, dispatch) => {
+    try {
+        const { username, password, repeatPassword, email, phone } = newUser;
+        const response = await axios.post(`${baseUrl}/user/register`, {
+            name: username,
+            email,
+            password,
+            confirmPassword: repeatPassword,
+            phone
+        });
+        dispatch(Register(response.data.data));
+    } catch (error) {
+        console.log('Register error: ', error.response.data.error);
         throw error;
     }
 }

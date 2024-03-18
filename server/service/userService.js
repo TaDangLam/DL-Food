@@ -14,8 +14,8 @@ const userService = {
                 message: 'Get all user is success',
                 data: allUser
             }
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);
         }
     },
     getDetailUser: async(id) => {
@@ -32,20 +32,17 @@ const userService = {
                 message: 'SUCCESS',
                 data: checkUser
             }
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);
         }
     },
-    createUser: async(newUser) => {
+    register: async(newUser) => {
         const { name, email, password, confirmPassword, phone } = newUser;
         try {
-            const checkUser = await User.findOne({ email });
+            const checkUser = await User.findOne({ name });
             // console.log(checkUser)
             if (checkUser) {
-                return {
-                    status: "OK",
-                    message: "You already have an account"
-                };
+                throw new Error('This user is exist');
             }
             const hashed = bcrypt.hashSync(password, 10)
             const newUserDoc = new User({
@@ -61,8 +58,8 @@ const userService = {
                 message: "CREATED",
                 data: user
             };
-        } catch (err) {
-            throw err;
+        } catch (error) {
+            throw new Error(error.message);
         }
     },
     loginUser: async(user) => {
