@@ -8,10 +8,11 @@ import { LiaPizzaSliceSolid } from "react-icons/lia";
 import { BsCupHot } from "react-icons/bs";
 import { LuSoup, LuSalad  } from "react-icons/lu";
 import { CiShoppingCart } from "react-icons/ci";
-
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from "sweetalert2";
 
 import { fetchAllCategory, getProductCategory } from "./api/route";
-import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from "@/lib/features/cart/cartSlice";
 
 export default function Home() {
   const category = useSelector((state) => state.category.categories);
@@ -20,8 +21,7 @@ export default function Home() {
   // const [products, setProduct ] = useState([]);
   const dispatch = useDispatch();
   const idCategory = process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID;
-  const user = useSelector(state => state.auth.user);
-  console.table(user)
+
 
   useEffect(() => {
     fetchAllCategory(dispatch)
@@ -30,6 +30,17 @@ export default function Home() {
     
     getCateClick(idCategory);
   }, []);
+
+  const handleAddToCart = async(item) => {
+    await dispatch(addToCart(item));
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Product Has Been Added to Cart",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
 
   const getCateClick = async(cid) => {
     getProductCategory(cid, dispatch)
@@ -159,7 +170,9 @@ export default function Home() {
               <div className="w-full h-1/6 text-lg font-medium">{product.name}</div>
               <div className="flex items-center justify-between w-full h-1/6 text-[#ffc139] text-xl font-semibold">
                 <div className="text-2xl">$ {product.price}</div>
-                <Link href={'/cart'} className="flex bg-[#ffc139] p-3 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500"><CiShoppingCart className=""/></Link>
+                <div onClick={() => handleAddToCart(product)} className="flex bg-[#ffc139] p-3 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500">
+                  <CiShoppingCart/>
+                </div>
               </div>
             </div>
           ))}

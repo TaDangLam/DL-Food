@@ -103,27 +103,33 @@ const userService = {
                 throw new Error(error.message);
             }
     },
-    updateUser: (userId, data) => {
-        return new Promise(async(resolve, reject) => {
-            // const { name, email, password, confirmPassword, phone } = user;
-            try {
-                const checkUser = await User.findById(userId);
-                if(checkUser === null) {
-                    resolve({
-                        status: "OK",
-                        message: "The user is not defined"
-                    });
-                }
-                const updateUser = await User.findByIdAndUpdate(userId, data, { new: true });
-                resolve({
-                    status: 'OK',
-                    message: 'SUCCESS',
-                    data: updateUser
-                })
-            } catch (err) {
-                reject(err);
+    updateUser: async(userId, data) => {
+        try {
+            const { email, password, confirmPassword, phone } = data;
+            const checkUser = await User.findById(userId);
+            if(checkUser === null) {
+                throw new Error('User is not exist');
             }
-        });
+            const updateFields = {};
+            if (email) updateFields.email = email;
+            if (phone) updateFields.phone = phone;
+            if (password && confirmPassword) {
+                if (password !== confirmPassword) {
+                    throw new Error('Password and confirmPassword do not match');
+                }
+                const hashedPassword = bcrypt.hashSync(password, 10);
+                updateFields.password = hashedPassword;
+                updateFields.confirmPassword = hashedPassword;
+            }
+            const updatedUser = await User.findByIdAndUpdate(userId, updateFields, { new: true });
+            return({
+                status: 'OK',
+                message: 'SUCCESS',
+                data: updatedUser
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        }
     },
     deleteUser: (userId) => {
         return new Promise(async(resolve, reject) => {

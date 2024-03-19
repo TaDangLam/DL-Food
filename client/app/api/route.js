@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { setCategory } from "@/lib/features/category/categorySlice";
 import { setProductByCategory, setAllProductByCategory, setAllProductById } from "@/lib/features/product/productSlice";
-import { Login, Logout, Register } from '@/lib/features/user/authSlice'
+import { Login, Logout, Register, UpdateUser } from '@/lib/features/user/authSlice'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BACKEND;
 
@@ -91,16 +91,17 @@ export const getReviewById = async(id) => {
 
 
 
-// ---------------------------- User -----------------------------
+// ---------------------------- User (Be careful response.data.data) -----------------------------
 export const login = async(username, password, dispatch) => {
     try {
         const response = await axios.post(`${baseUrl}/user/login`, {
             name: username,
             password: password
         });
-        dispatch(Login(response.data.data));
+        const { data, accessToken, refreshToken } = response.data;
+        dispatch(Login({ data, accessToken, refreshToken }));
     } catch (error) {
-        console.log('Login error: ', error);
+        console.log('Login error: ', error.response.data.error);
         throw error;
     }
 }
@@ -118,6 +119,26 @@ export const register = async(newUser, dispatch) => {
         dispatch(Register(response.data.data));
     } catch (error) {
         console.log('Register error: ', error.response.data.error);
+        throw error;
+    }
+}
+
+export const updateUser = async(updateUser, dispatch) => {
+    try {
+        const { email, password, repeatPassword, phone, accessToken, userID } = updateUser;
+        const response = await axios.patch(`${baseUrl}/user/update-user/${userID}`, {
+            email,
+            password,
+            confirmPassword: repeatPassword,
+            phone
+        }, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        dispatch(UpdateUser(response.data.data));
+    } catch (error) {
+        console.log('Update User error: ', error.response.data.error);
         throw error;
     }
 }

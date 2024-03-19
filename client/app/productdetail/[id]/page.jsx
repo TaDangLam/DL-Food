@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CiShoppingCart  } from "react-icons/ci";
 import { FaStar, FaRegStar, FaUserCircle  } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 import { getAllProductById, getReviewById } from "@/app/api/route";
+import { addToCart } from "@/lib/features/cart/cartSlice";
 import Navbar from "@/components/Navbar";
 
 const ProductDetail = () => {
@@ -80,6 +82,17 @@ const ProductDetail = () => {
         return star;
     }
 
+    const handleAddToCart = async(product) => {
+        await dispatch(addToCart(product));
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Product Has Been Added to Cart",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+
     console.log(product);
     return ( 
         <div className="margin-component mt-[31px] flex gap-5">
@@ -102,7 +115,7 @@ const ProductDetail = () => {
                         <div className="w-full h-1/4">
                             <button
                                 className="flex items-center gap-3 bg-[#fab348] hover:bg-[#ffc139] text-white px-6 py-3 rounded-full font-semibold"
-                                // onClick={}
+                                onClick={() => handleAddToCart(product)}
                             >
                                 <span className="text-2xl font-semibold"><CiShoppingCart /></span>
                                 ADD TO CART

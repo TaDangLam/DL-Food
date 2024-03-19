@@ -1,23 +1,20 @@
+'use client'
 import { FaSearch, FaUserAlt, FaShoppingCart, FaFacebookSquare, FaTiktok  } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
 import Link from 'next/link'
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation'
 import { FaUser } from "react-icons/fa";
+import Tippy from '@tippyjs/react/headless';
 
-import { logout } from "@/app/api/route";
+
+import Popper from "./Popper";
 
 const Header = () => { 
     const user = useSelector(state => state.auth.user);
     const dispatch = useDispatch();
     const router = useRouter();
-
-    const handleLogout = async() => {
-        await logout(dispatch);
-        console.log('OK Rồi');
-        router.push('/')
-    }
-    
+    console.log(user);
     return(
         <div className='margin-component h-full'>
             <div className="flex w-full h-1/2 pt-2">
@@ -53,11 +50,10 @@ const Header = () => {
                         </Link>
                     </div>
                     {user ? (
-                        <div onClick={handleLogout} className="flex items-center gap-2 cursor-pointer text-[#ff9b49] font-semibold">
+                        <Link href={'/information'} className="flex items-center gap-2 cursor-pointer text-[#ff9b49] font-semibold">
                             <FaUser />
                             {user.name}
-
-                        </div>
+                        </Link>
                     ) : (
                         <div className="w-1/2 p-4">
                             <Link href={'/auth'} className="flex items-center justify-center gap-2 hover:text-[#ffc139] font-semibold">

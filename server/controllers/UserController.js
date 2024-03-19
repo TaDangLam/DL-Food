@@ -57,11 +57,8 @@ const userController = {
     updateUser: async(req, res) => {
         try {
             const userId = req.params.id;
-            const data = req.body;
-            if(!userId){
-                return res.status(StatusCodes.NOT_FOUND).json('The user is not required')
-            }
-            const response = await userService.updateUser(userId, data);
+            const { email, password, confirmPassword, phone } = req.body;
+            const response = await userService.updateUser(userId, req.body);
             return res.status(StatusCodes.OK).json(response)
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
