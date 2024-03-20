@@ -19,10 +19,10 @@ const AddressController = {
     },
     addAddress: async(req, res) => {
         try {
-            const userId = req.user.payload.id;
+            const { userId } = req.params;
             const { street, city, province } = req.body;
             if( !street || !city || !province ) {
-                return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please input all required fields in Address' });
+                return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Please input all required fields in Address' });
             }
             const response = await addressService.addAddress(userId, req.body);
             res.status(StatusCodes.CREATED).json(response);

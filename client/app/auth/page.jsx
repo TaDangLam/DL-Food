@@ -38,7 +38,7 @@ const Login = () => {
                 icon: "success",
                 title: "Signed in successfully"
               });
-            router.push('/');
+            router.back();
         } catch (error) {
             console.error('Login error:', error.message);
             const Toast = Swal.mixin({

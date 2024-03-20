@@ -6,7 +6,7 @@ import { logout } from "@/app/api/route";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
 
-const NavbarInfo = ({ user }) => {
+const NavbarInfo = () => {
     const router = useRouter();
     const pathname = usePathname();
     const dispatch = useDispatch();
@@ -30,14 +30,14 @@ const NavbarInfo = ({ user }) => {
                         Account Detail
                     </Link>
                     <Link
-                        href={`/information/orderUser/${user?.user._id}`}
-                        className={pathname.includes(`/information/orderUser/${user?.user._id}`) ? active : inactiveLink}
+                        href={`/information/order`}
+                        className={pathname.includes(`/information/order`) ? active : inactiveLink}
                     >
                         Order
                     </Link>
                     <Link
-                        href={"/information"}
-                        className={pathname.includes('/dashboard/user') ? active : inactiveLink}
+                        href={"/information/address"}
+                        className={pathname.includes('/information/address') ? active : inactiveLink}
                     >
                         Address
                     </Link>

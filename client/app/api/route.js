@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { setCategory } from "@/lib/features/category/categorySlice";
 import { setProductByCategory, setAllProductByCategory, setAllProductById } from "@/lib/features/product/productSlice";
-import { Login, Logout, Register, UpdateUser } from '@/lib/features/user/authSlice'
+import { Login, Logout, Register, UpdateUser, addNewAddress, updateAddress, deleteAddress } from '@/lib/features/user/authSlice'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BACKEND;
 
@@ -145,4 +145,51 @@ export const updateUser = async(updateUser, dispatch) => {
 
 export const logout = (dispatch) => {
     dispatch(Logout());
+}
+
+
+// ---------------------------- Address  -----------------------------
+export const addAddress = async(data, userId, accessToken, dispatch) => {
+    try {
+        const { street, city, province } = data;
+        const response = await axios.post(`${baseUrl}/address/add-address/${userId}`, { street, city, province }, {headers: {'token': `Bearer ${accessToken}` }});
+        dispatch(addNewAddress(response.data.data));
+    } catch (error) {
+        console.log('Update Address error: ', error.response.data.error);
+        throw error;
+    }
+}
+
+export const updateAddr = async(data, addressId, accessToken, dispatch) => {
+    try {
+        const { street, city, province } = data;
+        const response = await axios.patch(`${baseUrl}/address/update-address/${addressId}`, { street, city, province }, {headers: {'token': `Bearer ${accessToken}` }});
+        dispatch(updateAddress(response.data.data));
+    } catch (error) {
+        console.log('Update Address error: ', error.response.data.error);
+        throw error;
+    }
+}
+
+export const removeAddress = async(addressId, accessToken, dispatch) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/address/delete-address/${addressId}`, {headers: {'token': `Bearer ${accessToken}` }});
+        dispatch(deleteAddress(addressId));
+        // console.log(response.data.message);
+    } catch (error) {
+        console.log('Update Address error: ', error.response.data.error);
+        throw error;
+    }
+}
+
+
+// ---------------------------- Order  -----------------------------
+export const createOrder = async( accessToken, dispatch) => {
+    try {
+        const response = await axios.post(`${baseUrl}/order/create-order`, {headers: {'token': `Bearer ${accessToken}` }});
+        console.log(response.data.data);
+    } catch (error) {
+        console.log('Update Address error: ', error.response.data.error);
+        throw error;
+    }
 }

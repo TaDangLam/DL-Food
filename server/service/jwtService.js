@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const middlewareToken = {
     genneralAccessToken: async(payload) => {
         // console.log('payload', payload);
-        const access_token = jwt.sign({payload}, process.env.ACCESS_TOKEN, { expiresIn: '6h'});
+        const access_token = jwt.sign({payload}, process.env.ACCESS_TOKEN, { expiresIn: '7d'});
         return access_token;
     },
     genneralRefreshToken: async(payload) => {

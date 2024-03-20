@@ -18,7 +18,6 @@ export default function Home() {
   const category = useSelector((state) => state.category.categories);
   const products = useSelector((state) => state.product.fewProducts);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  // const [products, setProduct ] = useState([]);
   const dispatch = useDispatch();
   const idCategory = process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID;
 
@@ -170,7 +169,7 @@ export default function Home() {
               <div className="w-full h-1/6 text-lg font-medium">{product.name}</div>
               <div className="flex items-center justify-between w-full h-1/6 text-[#ffc139] text-xl font-semibold">
                 <div className="text-2xl">$ {product.price}</div>
-                <div onClick={() => handleAddToCart(product)} className="flex bg-[#ffc139] p-3 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500">
+                <div onClick={() => handleAddToCart(product)} className="flex bg-[#ffc139] p-3 w-1/6 text-white rounded-full hover:text-[#ffc139] hover:bg-white  hover:outline hover:outline-[#ffc139] duration-500 cursor-pointer">
                   <CiShoppingCart/>
                 </div>
               </div>

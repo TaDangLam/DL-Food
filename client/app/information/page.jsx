@@ -59,7 +59,7 @@ const Information = () => {
           });
         }
     }
-    console.table(user)
+    // console.table(user)
     return (
         <div className="">
           <div className="flex h-full gap-5">
