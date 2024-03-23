@@ -54,7 +54,7 @@ const OrderController = {
     },
     createOrder: async(req, res) => {
         try {
-            const { orderBy, paymentType, totalPrice, orderDetail, address } = req.body;
+            const { orderBy, paymentType, totalPrice, orderDetail, address, isPaid } = req.body;
             if (!orderBy || !paymentType || !totalPrice || !orderDetail || !address) {
                 return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Please provide all required fields.' });
             }

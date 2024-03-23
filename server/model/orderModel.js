@@ -16,7 +16,11 @@ const OrderSchema = new mongoose.Schema ({
             totalPriceProduct: { type: String, required: true },
         }
     ],
-    address: {type: mongoose.Schema.Types.ObjectId, ref: 'Address'},
+    address: {
+        street: {type: String, required: true},
+        city: {type: String, required: true},
+        province: {type: String, required: true}
+    },
     isPaid: {type: Boolean}
 }, {
     timestamps: true

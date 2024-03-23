@@ -91,8 +91,8 @@ const orderService = {
     },
     createOrder: async(orderData) => {
         try {
-            const { orderBy, paymentType, totalPrice, orderDetail, address } = orderData;
-            const newOrder = await Order.create({ orderBy, paymentType, totalPrice, orderDetail, address });
+            const { orderBy, paymentType, totalPrice, orderDetail, address, isPaid } = orderData;
+            const newOrder = await Order.create({ orderBy, paymentType, totalPrice, orderDetail, address, isPaid });
             return ({
                 message: 'Create Order is success',
                 status: 'OK',

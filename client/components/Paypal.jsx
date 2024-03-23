@@ -13,6 +13,7 @@ const style = {"layout":"vertical"};
 const ButtonWrapper = ({ currency, showSpinner, amount, payload, accessToken }) => {
     const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
     const router = useRouter();
+
     useEffect(() => {
         dispatch({
             type: 'resetOption',
@@ -78,7 +79,7 @@ const ButtonWrapper = ({ currency, showSpinner, amount, payload, accessToken }) 
                 onApprove={(data, actions) => actions.order.capture().then(async (response) => {
                     if(response.status === 'COMPLETED'){
                         await handleSaveOrder(payload);
-                        console.log(payload);
+                        // console.log(payload);
                     }
                 })}
             />

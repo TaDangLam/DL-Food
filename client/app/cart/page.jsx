@@ -12,7 +12,7 @@ const Cart = () => {
     const dispatch = useDispatch();
     const carts = useSelector(state => state.cart.cart);
     const accessToken = useSelector(state => state.auth.accessToken);
-    console.log(accessToken);
+    // console.log(accessToken);
 
     const handleRemoveProductFromCart = async(cart) => {
         dispatch(removeProduct(cart));

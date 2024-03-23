@@ -1,23 +1,16 @@
 'use client'
-import axios from "axios";
-import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineRight } from "react-icons/ai";
 import { BsCurrencyDollar } from "react-icons/bs";
-import { TbCircleNumber1, TbCircleNumber2 } from "react-icons/tb";
 import { LiaChevronCircleRightSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
-// import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { createOrder } from "../api/route";
 import Paypal from "@/components/Paypal";
-// import { PayPalButton } from "react-paypal-button-v2";
-// import Paypal2 from "@/components/Paypal2";
 
 const CheckoutPage = () => {
     const router = useRouter();
-    const { idUser } = useParams();
-
     const user = useSelector(state => state.auth.user);
     const cartsData = useSelector(state => state.cart.cart);
     const accessToken = useSelector(state => state.auth.accessToken);
@@ -27,8 +20,7 @@ const CheckoutPage = () => {
     const [phone, setPhone] = useState(user.phone);
     const [total, setTotal] = useState(0);
     const [statusPaid, setStatusPaid] = useState(false);
-    const [selectedAddress, setSelectedAddress] = useState('');
-    const [tempAddress, setTempAddress] = useState('');
+    const [selectedAddress, setSelectedAddress] = useState(user.address[0]);
     const [selectedPaymentMethod ,setSelectedPaymentMethod] = useState('COD');
 
     const calcuTotal = () => {
@@ -44,13 +36,66 @@ const CheckoutPage = () => {
     //     setTempAddress(selectedAddress)
     // }, [selectedAddress])
 
+    const handleAddressChange = (event) => {
+        const selectedId = event.target.value;
+        const selectedAddr = user.address.find(addr => addr._id === selectedId);
+        setSelectedAddress(selectedAddr);
+    };
 
-    const handleDirectPayment = () => {
-        console.log("Processing direct payment (COD)...");
+    const handleDirectPayment = async() => {
+        try {
+            const payload = {
+                orderBy: user._id,
+                paymentType: selectedPaymentMethod,
+                totalPrice: total,
+                orderDetail: cartsData.map(cartItem => ({
+                    productId: cartItem.item._id, 
+                    quantity: cartItem.quantity,
+                    totalPriceProduct: cartItem.total 
+                })),
+                isPaid: statusPaid,
+                address: selectedAddress
+            } 
+            await createOrder(payload, accessToken);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: '#f1f5f9',
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "success",
+                title: "Payment is Success"
+              });
+            router.push('/information/order');
+        } catch (error) {
+            console.log(error)
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "error",
+                title: `${error.response.data.error}`
+              });
+        }
     }
 
-    console.log('selectedAddress', selectedAddress);
-    // console.log('tempAddress', tempAddress);
+
+    // console.log('selectedAddress',selectedAddress);
     
 
     return( 
@@ -119,9 +164,8 @@ const CheckoutPage = () => {
                                 name="" 
                                 id=""
                                 className="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                onChange={e => setSelectedAddress(e.target.value)}
+                                onChange={handleAddressChange}
                                 >
-                                    <option value="" className="">Choose Address</option>
                                     {user.address.map(addr => (
                                         <option key={addr._id} value={addr._id}>{`${addr.street}, ${addr.city}, ${addr.province}`}</option>
                                     ))}

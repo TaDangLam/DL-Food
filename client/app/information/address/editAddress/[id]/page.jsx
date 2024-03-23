@@ -77,7 +77,7 @@ const editAddress = () => {
 
                     </div>
                     <button type="submit" className="bg-gradient-to-r from-signup-left to-signup-right hover:shadow-xl text-white font-bold py-2 px-4 mx-3 w-36 rounded mt-2">
-                        Add
+                        Update
                     </button>
                 </form>
             </div>

@@ -27,6 +27,10 @@ const Order = () => {
         getOrderUser(accessToken);
     }, [accessToken])
 
+    const renderIsPaid = (isPaid) => {
+        return isPaid ? "Yes" : "No";
+    };
+
     console.log(orders)
 
     return (
@@ -41,6 +45,7 @@ const Order = () => {
                             <td className={border2}>ID</td>
                             <td className={border2}>Method</td>
                             <td className={border2}>Status</td>
+                            <td className={border2}>Is Paid</td>
                             <td className={border2}>Total</td>
                             <td className={border2}></td>
                         </tr>
@@ -52,6 +57,7 @@ const Order = () => {
                                 <td className={`${border1} pl-2`}>{order._id}</td>
                                 <td className={`${border1} pl-2`}>{order.paymentType}</td>
                                 <td className={`${border1} pl-2 `}>{order.status}</td>
+                                <td className={`${border1} pl-2 text-center`}>{renderIsPaid(order.isPaid)}</td>
                                 <td className={`${border1} pl-2 `}>{order.totalPrice}</td>
                                 <td className={`${border1} p-2 flex justify-center`}>
                                     <Link href={`/information/order/orderdetail/${order._id}`} className="flex bg-slate-300 p-1.5 gap-1 rounded-lg text-slate-600 hover:bg-lime-700 hover:text-white w-4/5 justify-center">
