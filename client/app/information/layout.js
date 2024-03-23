@@ -8,7 +8,7 @@ import NavbarAddress from "./components/NavbarAddress";
 
 const InformationLayout = ({ children }) => {
     const pathname = usePathname();
-    const isAuthOrDashboardPage = pathname.startsWith('/information/detailOrder');
+    const isAuthOrDashboardPage = pathname.startsWith('/information/order/orderdetail');
     const isAddressPage = pathname.startsWith('/information/address/newAddress');
     const isEditAddressPage = pathname.startsWith('/information/address/editAddress');
     const showHeaderAndFooter = !isAuthOrDashboardPage && !isAddressPage && !isEditAddressPage;

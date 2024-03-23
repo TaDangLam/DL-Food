@@ -12,7 +12,7 @@ const Address = () => {
     const accessToken = useSelector(state => state.auth.accessToken);
     const dispatch = useDispatch();
     
-    console.log(user);
+    // console.log(user);
 
     const handleRemoveAddress = (id) => {
         Swal.fire({

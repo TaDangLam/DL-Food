@@ -184,6 +184,26 @@ export const removeAddress = async(addressId, accessToken, dispatch) => {
 
 
 // ---------------------------- Order  -----------------------------
+export const getAllOrderUser = async(accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/order/get-all-order-user`, {headers: {'token': `Bearer ${accessToken}` }});
+        return(response.data.data);
+    } catch (error) {
+        console.log('Get All Order User error: ', error.response.data.error);
+        throw error;
+    }
+}
+
+export const getOrderDetail = async(id, accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/order/get-detail-order/${id}`, {headers: {'token': `Bearer ${accessToken}` }});
+        return(response.data.data);
+    } catch (error) {
+        console.log('Get All Order User error: ', error.response.data.error);
+        throw error;
+    }
+}
+
 export const createOrder = async(data, accessToken) => {
     try {
         const { orderBy, paymentType, totalPrice, orderDetail, address, isPaid } = data
@@ -192,7 +212,7 @@ export const createOrder = async(data, accessToken) => {
         {headers: {'token': `Bearer ${accessToken}` }});
         return(response.data.data);
     } catch (error) {
-        console.log('Update Address error: ', error.response.data.error);
+        console.log('Create Order error: ', error.response.data.error);
         throw error;
     }
 }

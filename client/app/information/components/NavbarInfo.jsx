@@ -30,16 +30,16 @@ const NavbarInfo = () => {
                         Account Detail
                     </Link>
                     <Link
-                        href={`/information/order`}
-                        className={pathname.includes(`/information/order`) ? active : inactiveLink}
-                    >
-                        Order
-                    </Link>
-                    <Link
                         href={"/information/address"}
                         className={pathname.includes('/information/address') ? active : inactiveLink}
                     >
                         Address
+                    </Link>
+                    <Link
+                        href={`/information/order`}
+                        className={pathname.includes(`/information/order`) ? active : inactiveLink}
+                    >
+                        Order
                     </Link>
                     <button onClick={handleLogout} className={inactiveLink}>
                         Log out

@@ -1,41 +1,32 @@
 'use client'
-import axios from "axios";
+import { usePathname, useRouter } from 'next/navigation';
+import { useDispatch } from "react-redux";
 import Link from "next/link";
-import { usePathname, useRouter } from 'next/navigation'
 
-const apiUser = process.env.NEXT_PUBLIC_API_LOG_OUT
-
-const NavbarOrderDetail = ({ user }) => {
+const NavbarAddress = () => {
     const router = useRouter();
     const pathname = usePathname();
-    const inactiveLink = 'flex items-center justify-center w-full px-4  cursor-pointer  h-12 text-center text-lg font-bold hover:bg-slate-100 hover:rounded-t-md'
-    const active = inactiveLink + ' bg-gradient-to-r from-signup-left to-signup-right rounded-md text-white';
+    const dispatch = useDispatch();
+    const inactiveLink = 'flex items-center justify-center w-full px-4  cursor-pointer h-12 text-center text-lg font-bold hover:bg-slate-100'
+    const active = inactiveLink + ' bg-gradient-to-r from-signup-left to-signup-right text-white';
     
-    const handleLogout = async() => {
-        try {
-            await axios.post(apiUser);
-            sessionStorage.removeItem('user');
-            console.log('logout successful')
-            window.location.reload();
-        } catch (err) {
-            console.log(err);
-        }
-        
+    const hanleBack = async() => {
+        router.push('/information/order')
     }
 
     return ( 
         <div>
-            <div className="">
+            <div className="border-2">
                 <div className="w-full text-sm font-medium text-gray-900 bg-white  rounded-xl">
-                    <div
-                        aria-current="true"
-                        className={active}
+                    <Link
+                        href={"/information/address"}
+                        className={pathname.includes('/information/order/orderdetail') ? active : inactiveLink}
                     >
                         Order Detail
-                    </div>
-  
-                    <button onClick={handleLogout} className="flex items-center justify-center w-full px-4  cursor-pointer  h-12 text-center text-lg font-bold">
-                        Log out
+                    </Link>
+
+                    <button onClick={hanleBack} className={inactiveLink}>
+                        Back
                     </button>
                 </div>
             </div>
@@ -43,4 +34,4 @@ const NavbarOrderDetail = ({ user }) => {
      );
 }
  
-export default NavbarOrderDetail;
+export default NavbarAddress;
