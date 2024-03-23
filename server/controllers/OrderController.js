@@ -56,7 +56,7 @@ const OrderController = {
         try {
             const { orderBy, paymentType, totalPrice, orderDetail, address } = req.body;
             if (!orderBy || !paymentType || !totalPrice || !orderDetail || !address) {
-                return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide all required fields.' });
+                return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Please provide all required fields.' });
             }
             const newOrder = await orderService.createOrder(req.body);
             res.status(StatusCodes.CREATED).json(newOrder)

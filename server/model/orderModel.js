@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
 const statusOrder = ['Pending', 'Processing', 'Delivered', 'Cancel'];
+const statusPayment = ['COD', 'Paypal'];
 
 const OrderSchema = new mongoose.Schema ({
     orderBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    paymentType: {type: mongoose.Schema.Types.ObjectId, ref: 'Payment'},
+    paymentType: {type: String, enum: statusPayment, default: 'COD'},
     totalPrice: {type: String, required: true},
     status: {type: String, enum: statusOrder, default: 'Pending'},
     orderDetail: [
@@ -16,7 +17,7 @@ const OrderSchema = new mongoose.Schema ({
         }
     ],
     address: {type: mongoose.Schema.Types.ObjectId, ref: 'Address'},
-    isPaid: {type: Boolean, default: false}
+    isPaid: {type: Boolean}
 }, {
     timestamps: true
 })
