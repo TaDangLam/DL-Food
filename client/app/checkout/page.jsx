@@ -9,6 +9,10 @@ import { TbCircleNumber1, TbCircleNumber2 } from "react-icons/tb";
 import { LiaChevronCircleRightSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
 
+// import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import Paypal from "@/components/Paypal";
+// import { PayPalButton } from "react-paypal-button-v2";
+// import Paypal2 from "@/components/Paypal2";
 
 const CheckoutPage = () => {
     const router = useRouter();
@@ -16,23 +20,39 @@ const CheckoutPage = () => {
 
     const user = useSelector(state => state.auth.user);
     const cartsData = useSelector(state => state.cart.cart);
+    const accessToken = useSelector(state => state.auth.accessToken);
     const [email, setEmail] = useState(user.email);
     const [name, setName] = useState(user.name);
-    const [address, setAddress] = useState('');
     const [province, setProvince] = useState('');
     const [phone, setPhone] = useState(user.phone);
     const [total, setTotal] = useState(0);
-    const [selectedAddress, setSelectedAddress] = useState(user.address[0]);
-    const [selectedPaymentMethod ,setSelectedPaymentMethod] = useState('');
-    
+    const [statusPaid, setStatusPaid] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState('');
+    const [tempAddress, setTempAddress] = useState('');
+    const [selectedPaymentMethod ,setSelectedPaymentMethod] = useState('COD');
+
     const calcuTotal = () => {
-        setTotal(cartsData.reduce((total, cart) => total + cart.total, 0));
+        const calc = cartsData.reduce((total, cart) => total + cart.total, 0);
+        setTotal(calc.toFixed(2));
     }
-    console.log(user)
+
     useEffect(() => {
         calcuTotal();
     }, [cartsData])
+
+    // useEffect(() => {
+    //     setTempAddress(selectedAddress)
+    // }, [selectedAddress])
+
+
+    const handleDirectPayment = () => {
+        console.log("Processing direct payment (COD)...");
+    }
+
+    console.log('selectedAddress', selectedAddress);
+    // console.log('tempAddress', tempAddress);
     
+
     return( 
         <div className="margin-component mt-[31px] flex flex-col gap-5">
             <div className="flex items-center gap-5 justify-center w-full h-1/6 py-8">
@@ -78,7 +98,7 @@ const CheckoutPage = () => {
                         
                         <div className="w-full ">
                             <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                                Email
+                                Phone
                             </label>
                             <input
                                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -97,12 +117,13 @@ const CheckoutPage = () => {
                             </label>
                             <select 
                                 name="" 
-                                id="" 
+                                id=""
                                 className="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 onChange={e => setSelectedAddress(e.target.value)}
                                 >
+                                    <option value="" className="">Choose Address</option>
                                     {user.address.map(addr => (
-                                        <option key={addr.id} value={addr.id}>{`${addr.street}, ${addr.city}, ${addr.province}`}</option>
+                                        <option key={addr._id} value={addr._id}>{`${addr.street}, ${addr.city}, ${addr.province}`}</option>
                                     ))}
                             </select>
                         </div>
@@ -117,7 +138,7 @@ const CheckoutPage = () => {
                             <div className="h-full w-2/12 text-xl font-semibold">Price</div>
                         </div>
                         {cartsData.map(cartItem => (
-                            <div className="flex items-center justify-between border-b-2 border-slate-100 h-full w-full">
+                            <div className="flex items-center justify-between border-b-2 border-slate-100 h-full w-full" key={cartItem._id}>
                                 <div className="h-full w-7/12">{cartItem.item.name}</div>
                                 <div className="h-full w-3/12 text-center">{cartItem.quantity}</div>
                                 <div className="h-full w-2/12 flex">{cartItem.total.toFixed(2)} </div>
@@ -125,10 +146,10 @@ const CheckoutPage = () => {
                         ))}
                         <div className="flex items-center justify-between border-b-2 border-[#ff8349] h-full w-full">
                             <div className="h-full w-6/12 text-xl font-semibold">Total:</div>
-                            <div className="h-full w-2/12 text-xl font-semibold flex"><span className="text-[#ff8349]">{total.toFixed(2)}</span> <BsCurrencyDollar/></div>
+                            <div className="h-full w-2/12 text-xl font-semibold flex"><span className="text-[#ff8349]">{total}</span> <BsCurrencyDollar/></div>
                         </div>
                     </div>
-                    <div className="w-full h-1/6 Lamta px-7">
+                    <div className="w-full h-1/6 px-7 Lamta">
                         <div className="flex items-center gap-2">
                             <input 
                                 type="radio" 
@@ -138,21 +159,42 @@ const CheckoutPage = () => {
                                 checked={selectedPaymentMethod === "COD"} 
                                 onChange={() => setSelectedPaymentMethod("COD")} 
                             />
-                            <label htmlFor="cod">Direct Payment (COD)</label>
+                            <label htmlFor="cod" className="font-semibold">Direct Payment (COD)</label>
                         </div>
                         <div className="flex items-center gap-2">
                             <input 
                                 type="radio" 
-                                id="paypal" 
+                                id="Paypal" 
                                 name="paymentMethod" 
                                 value="PayPal" 
-                                checked={selectedPaymentMethod === "PayPal"} 
-                                onChange={() => setSelectedPaymentMethod("PayPal")} 
+                                checked={selectedPaymentMethod === "Paypal"} 
+                                onChange={() => setSelectedPaymentMethod("Paypal")} 
                             />
-                            <label htmlFor="paypal">Online Payment (Paypal)</label>
+                            <label htmlFor="Paypal" className="font-semibold">Online Payment (Paypal)</label>
                         </div>
                     </div>
-                    <button type="submit" className="w-full h-1/6 bg-rose-500 p-2 text-white rounded-lg hover:bg-rose-800">Order</button>
+                    {selectedPaymentMethod === "COD" ? (
+                        <button type="button" onClick={handleDirectPayment} className="w-full h-1/6 bg-rose-500 p-2 text-white rounded-lg hover:bg-rose-800">Order</button>
+                    ) : (
+                        <div>
+                           <Paypal 
+                                amount={total} 
+                                payload={{
+                                    orderBy: user._id,
+                                    paymentType: selectedPaymentMethod,
+                                    totalPrice: total,
+                                    orderDetail: cartsData.map(cartItem => ({
+                                        productId: cartItem.item._id, 
+                                        quantity: cartItem.quantity,
+                                        totalPriceProduct: cartItem.total 
+                                    })),
+                                    isPaid: !statusPaid,
+                                    address: selectedAddress
+                                }}
+                                accessToken={accessToken}
+                            />
+                        </div>
+                    )}
                 </div>
             </form>
         </div>

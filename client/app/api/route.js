@@ -184,10 +184,13 @@ export const removeAddress = async(addressId, accessToken, dispatch) => {
 
 
 // ---------------------------- Order  -----------------------------
-export const createOrder = async( accessToken, dispatch) => {
+export const createOrder = async(data, accessToken) => {
     try {
-        const response = await axios.post(`${baseUrl}/order/create-order`, {headers: {'token': `Bearer ${accessToken}` }});
-        console.log(response.data.data);
+        const { orderBy, paymentType, totalPrice, orderDetail, address, isPaid } = data
+        const response = await axios.post(`${baseUrl}/order/create-order`, 
+        { orderBy, paymentType, totalPrice, orderDetail, address, isPaid }, 
+        {headers: {'token': `Bearer ${accessToken}` }});
+        return(response.data.data);
     } catch (error) {
         console.log('Update Address error: ', error.response.data.error);
         throw error;

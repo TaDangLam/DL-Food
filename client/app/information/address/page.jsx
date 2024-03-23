@@ -47,7 +47,7 @@ const Address = () => {
     return ( 
         <div className="flex flex-col gap-5 px-5 w-full h-full">
             <Link href={'/information/address/newAddress'} className="bg-[#ff9b49] text-white px-2 py-1.5 rounded-3xl w-1/6 font-semibold text-center">New Address</Link>
-            {user.address && user.address.length > 0 ? (
+            {user?.address && user?.address.length > 0 ? (
                 <table className="table-auto border-4 w-full h-1/2">
                     <thead className="border-2 bg-slate-200 text-xl font-semibold text-center">
                         <tr className="w-full">
