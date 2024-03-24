@@ -37,7 +37,7 @@ const userService = {
         }
     },
     register: async(newUser) => {
-        const { name, email, password, confirmPassword, phone } = newUser;
+        const { name, email, password, confirmPassword, phone, fullName } = newUser;
         try {
             const checkUser = await User.findOne({ name });
             // console.log(checkUser)
@@ -47,6 +47,7 @@ const userService = {
             const hashed = bcrypt.hashSync(password, 10)
             const newUserDoc = new User({
                 name,
+                fullName,
                 email,
                 password: hashed,
                 confirmPassword: hashed,
@@ -105,13 +106,14 @@ const userService = {
     },
     updateUser: async(userId, data) => {
         try {
-            const { email, password, confirmPassword, phone } = data;
+            const { email, password, confirmPassword, phone, fullName } = data;
             const checkUser = await User.findById(userId);
             if(checkUser === null) {
                 throw new Error('User is not exist');
             }
             const updateFields = {};
             if (email) updateFields.email = email;
+            if (fullName) updateFields.fullName = fullName;
             if (phone) updateFields.phone = phone;
             if (password && confirmPassword) {
                 if (password !== confirmPassword) {

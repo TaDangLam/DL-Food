@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation'
 import { useState } from "react";
 import { AiOutlineMail, AiOutlineLock } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 import { login } from "../api/route";
@@ -22,7 +22,7 @@ const Login = () => {
     const handleLogin = async(e) => {
         e.preventDefault();
         try {
-            await login(username, password, dispatch);
+            const data = await login(username, password, dispatch);
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -38,9 +38,9 @@ const Login = () => {
                 icon: "success",
                 title: "Signed in successfully"
               });
-            router.back();
+            checkRole(data);
         } catch (error) {
-            console.error('Login error:', error.message);
+            console.error('Login error:', error.response.data.error);
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -54,11 +54,21 @@ const Login = () => {
               });
               Toast.fire({
                 icon: "error",
-                title: "Please Login again"
+                title: `${error.response.data.error}`
               });
         }
     }
     
+    const checkRole = (role) => {
+        if(role === 'customer'){
+            router.push('/');
+        }else if(role === 'admin'){
+            router.push('/dashboard');
+        }else{
+            router.back();
+        }
+    }
+
     return(
         <div className="flex bg-gradient-to-r from-login-left to-login-right items-center justify-center h-screen bg-slate-100">
             <div className="bg-white flex h-3/4 w-4/5 shadow-login rounded-[25px]">

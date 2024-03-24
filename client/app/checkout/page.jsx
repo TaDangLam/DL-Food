@@ -15,7 +15,7 @@ const CheckoutPage = () => {
     const cartsData = useSelector(state => state.cart.cart);
     const accessToken = useSelector(state => state.auth.accessToken);
     const [email, setEmail] = useState(user.email);
-    const [name, setName] = useState(user.name);
+    const [fullName, setFullName] = useState(user.fullName);
     const [province, setProvince] = useState('');
     const [phone, setPhone] = useState(user.phone);
     const [total, setTotal] = useState(0);
@@ -32,10 +32,7 @@ const CheckoutPage = () => {
         calcuTotal();
     }, [cartsData])
 
-    // useEffect(() => {
-    //     setTempAddress(selectedAddress)
-    // }, [selectedAddress])
-
+    console.log(user)
     const handleAddressChange = (event) => {
         const selectedId = event.target.value;
         const selectedAddr = user.address.find(addr => addr._id === selectedId);
@@ -117,11 +114,11 @@ const CheckoutPage = () => {
                             </label>
                             <input
                                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="email"
+                                id="fullName"
                                 type="text"
                                 readOnly
-                                value={name}
-                                onChange={e => setName(e.target.value)}
+                                value={fullName}
+                                onChange={e => setFullName(e.target.value)}
                                 placeholder=""
                             />
                         </div>

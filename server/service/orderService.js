@@ -33,7 +33,7 @@ const orderService = {
     getDetailOrder: async(oid) => {
         try {
            const order = await Order.findById(oid)
-            .populate({path: 'orderBy', select: 'email name phone'})
+            .populate({path: 'orderBy', select: 'email name fullName phone'})
             .populate('address')
             .populate('orderDetail.productId');
            return({

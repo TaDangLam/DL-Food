@@ -58,7 +58,7 @@ const OrderDetail = () => {
                         </svg>
                         <span className="font-bold">Information User</span>
                     </div>
-                    <div className="flex gap-2"><span className="font-semibold">Name:</span> <span>{orderDetail?.orderBy?.name}</span></div>
+                    <div className="flex gap-2"><span className="font-semibold">Name:</span> <span>{orderDetail?.orderBy?.fullName}</span></div>
                     <div className="flex gap-2"><span className="font-semibold">Phone:</span> <span>{orderDetail?.orderBy?.phone}</span></div>
                     <div className="flex gap-2"><span className="font-semibold">Street:</span> <span>{orderDetail?.address?.street}</span></div>
                     <div className="flex gap-2"><span className="font-semibold">City:</span> <span>{orderDetail?.address?.city}</span></div>
@@ -96,11 +96,11 @@ const OrderDetail = () => {
                 {orderDetail?.orderDetail.map(item => (
                     <div className="flex w-full gap-4 px-2 py-1 border-b-2 border-slate-200">
                         <div className=" w-2/12 ">
-                            <img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${item.productId.name}/${item.productId.images[0]}`} alt="img-Product" />
+                            <img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${item.productId?.name}/${item.productId?.images[0]}`} alt="img-Product" />
                         </div>
 
                         <div className="flex flex-col  gap-5 w-8/12 p-2">
-                            <div>{item.productId.name}</div>
+                            <div>{item.productId?.name}</div>
                             <div><span>Amount: </span><span>{item.quantity}</span></div>
                         </div>
 

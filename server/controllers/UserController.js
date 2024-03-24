@@ -24,10 +24,10 @@ const userController = {
     },
     register: async(req, res) => {
         try {
-           const { name, email, password, confirmPassword, phone } = req.body;
+           const { name, fullName, email, password, confirmPassword, phone } = req.body;
             const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
             const checkMail = regex.test(email);
-            if(!name || !email || !password || !confirmPassword || !phone){
+            if(!name || !email || !password || !confirmPassword || !phone || !fullName){
                 return res.status(StatusCodes.BAD_REQUEST).json({error: 'Please complete all information'});
             } else if (!checkMail) {
                 return res.status(StatusCodes.BAD_REQUEST).json({error: 'Email is not valid'})
@@ -46,7 +46,7 @@ const userController = {
             //  const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
             //  const checkMail = regex.test(email);
             if(!name || !password){
-                return res.status(StatusCodes.BAD_REQUEST).json({message: 'Please complete all information'});
+                return res.status(StatusCodes.BAD_REQUEST).json({error: 'Please complete all information'});
             }
             const response = await userService.loginUser(req.body);
             res.status(StatusCodes.ACCEPTED).json(response);
@@ -57,7 +57,7 @@ const userController = {
     updateUser: async(req, res) => {
         try {
             const userId = req.params.id;
-            const { email, password, confirmPassword, phone } = req.body;
+            const { email, password, confirmPassword, phone, fullName } = req.body;
             const response = await userService.updateUser(userId, req.body);
             return res.status(StatusCodes.OK).json(response)
         } catch (error) {

@@ -10,6 +10,7 @@ const Information = () => {
     const accessToken = useSelector(state => state.auth.accessToken);
     const dispatch = useDispatch();
     const [email, setEmail] = useState(user?.email);
+    const [fullName, setFullName] = useState(user?.fullName);
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [phone, setPhone] = useState(user?.phone);
@@ -23,7 +24,7 @@ const Information = () => {
       e.preventDefault();
         try {
             const userID = user._id;
-            const newUser = { email, password, repeatPassword, phone, accessToken, userID };
+            const newUser = { email, password, repeatPassword, phone, accessToken, userID, fullName };
             await updateUser(newUser, dispatch);
             const Toast = Swal.mixin({
               toast: true,
@@ -41,7 +42,7 @@ const Information = () => {
               title: "Update is Successfully"
             });
         } catch (error) {
-          console.error('Login error:', error.message);
+          console.error('Login error:', error);
           const Toast = Swal.mixin({
             toast: true,
             position: "center",
@@ -66,6 +67,22 @@ const Information = () => {
             <div className=" w-full h-full ">
               <form onSubmit={UpdateInfo} className="w-full p-5">
                 
+              <div className="flex flex-wrap -mx-3 mb-6">
+                  <div className="w-full px-3">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                      Name
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="email"
+                      type="text"
+                      value={fullName}
+                      onChange={e => setFullName(e.target.value)}
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+
                 <div className="flex flex-wrap -mx-3 mb-6">
                   <div className="w-full px-3">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">

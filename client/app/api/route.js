@@ -100,23 +100,25 @@ export const login = async(username, password, dispatch) => {
         });
         const { data, accessToken, refreshToken } = response.data;
         dispatch(Login({ data, accessToken, refreshToken }));
+        return response.data.data.role;
     } catch (error) {
         console.log('Login error: ', error.response.data.error);
         throw error;
     }
 }
 
-export const register = async(newUser, dispatch) => {
+export const register = async(newUser) => {
     try {
-        const { username, password, repeatPassword, email, phone } = newUser;
+        const { username, password, repeatPassword, email, phone, fullName } = newUser;
         const response = await axios.post(`${baseUrl}/user/register`, {
+            fullName,
             name: username,
             email,
             password,
             confirmPassword: repeatPassword,
             phone
         });
-        dispatch(Register(response.data.data));
+        return response.data.data
     } catch (error) {
         console.log('Register error: ', error.response.data.error);
         throw error;
@@ -125,8 +127,9 @@ export const register = async(newUser, dispatch) => {
 
 export const updateUser = async(updateUser, dispatch) => {
     try {
-        const { email, password, repeatPassword, phone, accessToken, userID } = updateUser;
+        const { email, password, repeatPassword, phone, accessToken, userID, fullName } = updateUser;
         const response = await axios.patch(`${baseUrl}/user/update-user/${userID}`, {
+            fullName,
             email,
             password,
             confirmPassword: repeatPassword,
@@ -138,7 +141,7 @@ export const updateUser = async(updateUser, dispatch) => {
         });
         dispatch(UpdateUser(response.data.data));
     } catch (error) {
-        console.log('Update User error: ', error.response.data.error);
+        console.log('Update User error: ', error);
         throw error;
     }
 }

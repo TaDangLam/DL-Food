@@ -21,7 +21,6 @@ export default function Home() {
   const dispatch = useDispatch();
   const idCategory = process.env.NEXT_PUBLIC_BURGER_CATEGORY_ID;
 
-
   useEffect(() => {
     fetchAllCategory(dispatch)
       // .then(result => setCategory(result.data))
