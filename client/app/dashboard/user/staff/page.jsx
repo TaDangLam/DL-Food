@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { getAllUser } from "@/app/api/route";
 import { deleteUser } from "@/app/api/route";
 
-const User = () => {
+const Staff = () => {
   const [userData, setUserData] = useState([]);
   const accessToken = sessionStorage.getItem('accessToken');
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,6 @@ const User = () => {
   }
 
   console.log(userData)
-  
     useEffect(() => {
       getAllUserForAdmin(accessToken);
   }, [accessToken])
@@ -69,7 +68,7 @@ const User = () => {
       ) : (
         <div className="flex flex-col gap-5 w-full h-full px-1.5">
           <div className="text-[#4b6cb7] text-3xl font-bold w-full h-1/6">
-            User
+            Staff
           </div>
           <table
             className={`table-auto border-collapse ${border1} w-full h-5/6 `}
@@ -130,4 +129,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Staff;

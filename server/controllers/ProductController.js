@@ -5,8 +5,9 @@ import productService from '../service/productService.js';
 const productController = {
     getAllProduct: async(req, res) => {
         try {
-            const { limit, page } = req.query;
-            const response = await productService.getAllProduct(Number(limit) || 8, Number(page) || 0);
+            // const { limit, page } = req.query;
+            // const response = await productService.getAllProduct(Number(limit) || 8, Number(page) || 0);
+            const response = await productService.getAllProduct();
             res.status(StatusCodes.OK).json(response);
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
@@ -50,8 +51,8 @@ const productController = {
     },
     createProduct: async(req, res) => {
         try {
-            const { name, price, title, desc, categoryId, options, images } = req.body;
-            if( !name || !price || !title || !desc || !categoryId || !options || images?.length === 0){
+            const { name, price, desc, categoryId, images } = req.body;
+            if( !name || !price || !desc || !categoryId || images?.length === 0){
                 return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please input all required fields and upload at least one image' });
             }
             const response = await productService.createProduct(req.body);

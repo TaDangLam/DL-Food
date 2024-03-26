@@ -8,7 +8,19 @@ import middlewareToken from "./jwtService.js";
 const userService = {
     getAllUser: async() => {
         try {
-            const allUser = await User.find();
+            const allUser = await User.find({ role: 'customer'});
+            return {
+                status: 'OK',
+                message: 'Get all user is success',
+                data: allUser
+            }
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    getAllStaff: async() => {
+        try {
+            const allUser = await User.find({ role: 'staff'});
             return {
                 status: 'OK',
                 message: 'Get all user is success',
@@ -66,7 +78,7 @@ const userService = {
     loginUser: async(user) => {
         const { name,  password } = user;
             try {
-                const checkUser = await User.findOne({name}).populate('address');
+                const checkUser = await User.findOne({name});
                 if(checkUser === null) {
                     throw new Error('User is not exist');
                 }

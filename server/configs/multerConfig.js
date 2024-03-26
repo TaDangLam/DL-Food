@@ -5,19 +5,22 @@ import fs from 'fs';
 import { Product } from '../model/productModel.js';
 
 const storage = multer.diskStorage({
-    destination: async function (req, images, cb) {
+    destination: async function (req, file, cb) {
         const productID = req.params.pid;
         const productName = req.body.name;
         // When update, if there is a change in the product's name, rename the product's upload folder's name either
+
         if(productID){
             const product = await Product.findById(productID);
             if(!product) {
-                return ({ message: 'Product is not found'});
+                return cb({ message: 'Product is not found'});
             }
             if(req.body.name !== product.name){
                 const oldUploadPath = path.join('./public/uploads/' + product.name);
                 const newUploadPath = path.join('./public/uploads/' + productName);
-                if (fs.existsSync(oldUploadPath)) fs.renameSync(oldUploadPath, newUploadPath);
+                if (fs.existsSync(oldUploadPath)) {
+                    fs.renameSync(oldUploadPath, newUploadPath)
+                };
             }
         }
 

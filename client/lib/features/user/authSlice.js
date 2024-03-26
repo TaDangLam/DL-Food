@@ -12,6 +12,9 @@ export const authSlice = createSlice({
             state.user = action.payload.data;
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
+            sessionStorage.setItem('user', JSON.stringify(action.payload.data));
+            sessionStorage.setItem('accessToken', action.payload.accessToken);
+            sessionStorage.setItem('refreshToken', action.payload.refreshToken);
         },
         Register: (state, action) => {
             state.user = action.payload;
@@ -23,6 +26,7 @@ export const authSlice = createSlice({
             state.user = null;
             state.accessToken = null;
             state.refreshToken = null;
+            sessionStorage.clear();
         },
         addNewAddress: (state, action) => {
             state.user.address.push(action.payload);

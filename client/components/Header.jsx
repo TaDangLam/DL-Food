@@ -11,11 +11,12 @@ import Tippy from '@tippyjs/react/headless';
 import Popper from "./Popper";
 
 const Header = () => { 
-    const user = useSelector(state => state.auth.user);
+    // const user = useSelector(state => state.auth.user);
+    const user = JSON.parse(sessionStorage.getItem('user'));
     const dispatch = useDispatch();
     const router = useRouter();
     
-    // console.log(user);
+    console.log(user);
     return(
         <div className='margin-component h-full'>
             <div className="flex w-full h-1/2 pt-2">
@@ -50,7 +51,7 @@ const Header = () => {
                             <FaShoppingCart /> Cart
                         </Link>
                     </div>
-                    {user ? (
+                    {user && Object.keys(user).length !== 0 ? (
                         <Link href={'/information'} className="flex items-center gap-2 cursor-pointer text-[#ff9b49] font-semibold">
                             <FaUser />
                             {user.name}

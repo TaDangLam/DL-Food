@@ -13,6 +13,14 @@ const userController = {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
         }
     },
+    getAllStaff: async(req, res) => {
+        try {
+            const response = await userService.getAllStaff();
+            res.status(StatusCodes.OK).json(response);
+        } catch (error) {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+        }
+    },
     getDetailUser: async(req, res) => {
         const id = req.params.id;
         try {

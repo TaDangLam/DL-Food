@@ -4,17 +4,18 @@ import fs from 'fs';
 import { Product } from '../model/productModel.js';
 
 const productService = {
-    getAllProduct: async(limit , page ) => {
+    getAllProduct: async() => {
         try {
-            const totalProduct = await Product.countDocuments();
-            const allProduct = await Product.find().limit(limit).skip(page * limit);    // default maybe page = 0
+            // const totalProduct = await Product.countDocuments();
+            // const allProduct = await Product.find().limit(limit).skip(page * limit);    // default maybe page = 0
+            const allProduct = await Product.find().populate('categoryId');
             return {
                 status: 'OK',
                 message: 'Get All Product is Success',
                 data: allProduct,
-                totalProduct: totalProduct,
-                pageCurrent: Number(page + 1),
-                totalPage: Math.ceil(totalProduct / limit),
+                // totalProduct: totalProduct,
+                // pageCurrent: Number(page + 1),
+                // totalPage: Math.ceil(totalProduct / limit),
             }
         } catch (error) {
             throw new Error(error.message);
@@ -86,8 +87,8 @@ const productService = {
     },
     createProduct: async(newProduct) => {
         try {
-            const { name, price, title, desc, categoryId, options, images } = newProduct;
-            const product = await Product.create({ name, price, title, desc, categoryId,  options, images: images || [] });
+            const { name, price, desc, categoryId, images } = newProduct;
+            const product = await Product.create({ name, price, desc, categoryId, images: images || [] });
             await product.save();
             return {
                 status: 'OK',
@@ -100,10 +101,10 @@ const productService = {
     },
     updateProduct: async(pid, newData) => {
         try {
-            const { name, price, title, desc, categoryId, options, images } = newData;
+            const { name, price, desc, categoryId, images } = newData;
             const product = await Product.findById(pid);
             if(!product) {
-                return ({ message : 'Product is not found'});
+                throw new Error('Product is not found');
             }
 
             // Check và lọc ảnh
@@ -113,18 +114,16 @@ const productService = {
             // Cập nhật thông tin sản phẩm
             product.name = name || product.name;
             product.price = price || product.price;
-            product.title = title || product.title;
             product.desc = desc || product.desc;
             product.categoryId = categoryId || product.categoryId;
-            product.options = options || product.options;
             product.images.push(...filterImages);
 
-            await product.save()
+            await product.save();
             return ({
                 status: 'OK',
                 message: 'Updated Product is Success',
                 data: product
-            })
+            });
         } catch (error) {
             throw new Error(error.message);
         }

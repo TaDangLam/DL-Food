@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { setCategory } from "@/lib/features/category/categorySlice";
-import { setProductByCategory, setAllProductByCategory, setAllProductById } from "@/lib/features/product/productSlice";
+import { setProductByCategory, setAllProductByCategory, setAllProductById, setAllProduct, addProduct, updateProduct } from "@/lib/features/product/productSlice";
 import { Login, Logout, Register, UpdateUser, addNewAddress, updateAddress, deleteAddress } from '@/lib/features/user/authSlice'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BACKEND;
@@ -48,6 +48,20 @@ export const deleteCategory = async(cid) => {
 }
 
 // ---------------------------- Product -----------------------------
+export const getAllProduct = async(accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/product`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Get All Product Error: ', error);
+        throw error;
+    }
+}
+
 export const getProductCategory = async(cid, dispatch) => {
     try {
         const response = await axios.get(`${baseUrl}/product/getFew-product-cate/${cid}`);
@@ -72,8 +86,51 @@ export const getAllProductById = async(pid, dispatch) => {
     try {
         const response = await axios.get(`${baseUrl}/product/get-detail/${pid}`);
         dispatch(setAllProductById(response.data.data));
+        return response.data.data;
     } catch (error) {
         console.log('Get All Product By Id error: ', error);
+        throw error;
+    }
+}
+
+export const createProduct = async(data, accessToken) => {
+    try {
+        const response = await axios.post(`${baseUrl}/product/add-product`, data, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Create Product error: ', error);
+        throw error;
+    }
+}
+
+export const Updateproduct = async(id, data, accessToken) => {
+    try {
+        const response = await axios.patch(`${baseUrl}/product/update-product/${id}`, data, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Update Product error: ', error);
+        throw error;
+    }
+}
+
+export const removeProduct = async(id, accessToken) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/product/delete-product/${id}`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.message;
+    } catch (error) {
+        console.log('Delete Product error: ', error);
         throw error;
     }
 }
@@ -92,6 +149,20 @@ export const getReviewById = async(id) => {
 
 
 // ---------------------------- User (Be careful response.data.data) -----------------------------
+export const getAllUser = async(accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/user/getAll`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Login error: ', error.response.data.error);
+        throw error;
+    }
+}
+
 export const login = async(username, password, dispatch) => {
     try {
         const response = await axios.post(`${baseUrl}/user/login`, {
@@ -142,6 +213,20 @@ export const updateUser = async(updateUser, dispatch) => {
         dispatch(UpdateUser(response.data.data));
     } catch (error) {
         console.log('Update User error: ', error);
+        throw error;
+    }
+}
+
+export const deleteUser = async(id, accessToken) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/user/delete-user/${id}`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.message;
+    } catch (error) {
+        console.log('Login error: ', error.response.data.error);
         throw error;
     }
 }

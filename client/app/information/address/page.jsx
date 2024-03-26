@@ -36,7 +36,7 @@ const Address = () => {
                     console.log(error)
                     Swal.fire({
                         title: "Error!",
-                        text: `${error.reponse.data}`,
+                        text: `${error}`,
                         icon: "error"
                     });
                 }

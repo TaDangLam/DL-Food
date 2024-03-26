@@ -54,10 +54,10 @@ const Order = () => {
                                 <tr key={order._id}>
                                     <td className={`${border1} pl-2 text-center`}>{index + 1}</td>
                                     <td className={`${border1} pl-2`}>{order._id}</td>
-                                    <td className={`${border1} pl-2`}>{order.paymentType}</td>
-                                    <td className={`${border1} pl-2 `}>{order.status}</td>
+                                    <td className={`${border1} pl-2 text-center`}>{order.paymentType}</td>
+                                    <td className={`${border1} pl-2 text-center`}>{order.status}</td>
                                     <td className={`${border1} pl-2 text-center`}>{renderIsPaid(order.isPaid)}</td>
-                                    <td className={`${border1} pl-2 `}>{order.totalPrice}</td>
+                                    <td className={`${border1} pl-2 text-center`}>{order.totalPrice}</td>
                                     <td className={`${border1} p-2 flex justify-center`}>
                                         <Link href={`/information/order/orderdetail/${order._id}`} className="flex bg-slate-300 p-1.5 gap-1 rounded-lg text-slate-600 hover:bg-lime-700 hover:text-white w-4/5 justify-center">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
