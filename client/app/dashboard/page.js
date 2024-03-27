@@ -1,7 +1,9 @@
 const Dashboard = () => {
     return ( 
-        <div>
-            aaaaaaaaaaaaaaaa
+        <div className="bg-blue-200 h-full w-full">
+            <div>aa</div>
+            <div>aa</div>
+            <div>aa</div>
         </div>   
     );
 }

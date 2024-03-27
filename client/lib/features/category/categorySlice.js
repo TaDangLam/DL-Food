@@ -7,10 +7,16 @@ export const cateSlice = createSlice({
     },
     reducers: {
         setCategory: (state, action) => {
-            state.categories = action.payload
+            state.categories = action.payload;
         },
+        addCategory: (state, action) => {
+            state.categories.push(action.payload);
+        },
+        removeCategory: (state, action) => {
+            state.categories = state.categories.filter(cate => cate._id !== action.payload);
+        }
     }
 })
 
-export const { setCategory } = cateSlice.actions;
+export const { setCategory, addCategory, removeCategory } = cateSlice.actions;
 export default cateSlice.reducer;

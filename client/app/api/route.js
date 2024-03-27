@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { setCategory } from "@/lib/features/category/categorySlice";
+import { setCategory, addCategory, removeCategory } from "@/lib/features/category/categorySlice";
 import { setProductByCategory, setAllProductByCategory, setAllProductById, setAllProduct, addProduct, updateProduct } from "@/lib/features/product/productSlice";
 import { Login, Logout, Register, UpdateUser, addNewAddress, updateAddress, deleteAddress } from '@/lib/features/user/authSlice'
 
@@ -17,10 +17,15 @@ export const fetchAllCategory = async(dispatch) => {
     }
 }
 
-export const createCategory = async() => {
+export const createCategory = async(accessToken, data, dispatch) => {
     try {
-        const response = await axios.post(`${baseUrl}/category/add-cate`);
-        return response.data;
+        const { name } = data
+        const response = await axios.post(`${baseUrl}/category/add-cate`, { name }, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        dispatch(addCategory(response.data.data))
     } catch (error) {
         console.log('Create Category error ', error);
         throw error;
@@ -30,19 +35,24 @@ export const createCategory = async() => {
 export const updateCategory = async(cid) => {
     try {
         const response = await axios.patch(`${baseUrl}/category/update-cate/${cid}`);
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.log('Update Category error: ', error);
         throw error;
     }
 }
 
-export const deleteCategory = async(cid) => {
+export const deleteCategory = async(cid, accessToken, dispatch) => {
     try {
-        const response = await axios.delete(`${baseUrl}/category/delete-cate/${cid}`);
-        return response.data;
+        const response = await axios.delete(`${baseUrl}/category/delete-cate/${cid}`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        dispatch(removeCategory(cid));
+        // return response.data.message;
     } catch (error) {
-        console.log('Delete Category: ', error);
+        console.log('Delete Category Error: ', error);
         throw error;
     }
 }
@@ -272,6 +282,16 @@ export const removeAddress = async(addressId, accessToken, dispatch) => {
 
 
 // ---------------------------- Order  -----------------------------
+export const getAllOrderAdmin = async(accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/order/get-all-order`, { headers: {'token': `Bearer ${accessToken}` } });
+        return response.data.data;
+    } catch (error) {
+        console.log('Get All Order Admin error: ', error);
+        throw error;
+    }
+}
+
 export const getAllOrderUser = async(accessToken) => {
     try {
         const response = await axios.get(`${baseUrl}/order/get-all-order-user`, {headers: {'token': `Bearer ${accessToken}` }});
