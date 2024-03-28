@@ -7,7 +7,7 @@ import { getOrderDetail } from "@/app/api/route";
 import { useSelector } from "react-redux";
 
 const OrderDetail = () => {
-    const accessToken = useSelector(state => state.auth.accessToken);
+    const accessToken = sessionStorage.getItem('accessToken');
     const { id } = useParams();
     const [orderDetail, setOrderDetail] = useState(null);
 

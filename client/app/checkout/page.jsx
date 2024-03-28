@@ -6,21 +6,25 @@ import { LiaChevronCircleRightSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
-import { createOrder } from "../api/route";
+import { createOrder, getDetailUser } from "../api/route";
 import Paypal from "@/components/Paypal";
 
 const CheckoutPage = () => {
     const router = useRouter();
-    const user = useSelector(state => state.auth.user);
+    // const user = useSelector(state => state.auth.user);
+    // const accessToken = useSelector(state => state.auth.accessToken);
+    const userString = sessionStorage.getItem('user');
+    const userSession = JSON.parse(userString)
+    const accessToken = sessionStorage.getItem('accessToken');
+    const [user, setUser] = useState(null);
     const cartsData = useSelector(state => state.cart.cart);
-    const accessToken = useSelector(state => state.auth.accessToken);
-    const [email, setEmail] = useState(user.email);
-    const [fullName, setFullName] = useState(user.fullName);
+    const [email, setEmail] = useState('');
+    const [fullName, setFullName] = useState('');
     const [province, setProvince] = useState('');
-    const [phone, setPhone] = useState(user.phone);
+    const [phone, setPhone] = useState('');
     const [total, setTotal] = useState(0);
     const [statusPaid, setStatusPaid] = useState(false);
-    const [selectedAddress, setSelectedAddress] = useState(user.address[0]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
     const [selectedPaymentMethod ,setSelectedPaymentMethod] = useState('COD');
 
     const calcuTotal = () => {
@@ -30,9 +34,22 @@ const CheckoutPage = () => {
 
     useEffect(() => {
         calcuTotal();
+        getDetailUserr();
     }, [cartsData])
 
-    console.log(user)
+    const getDetailUserr = async() => {
+        try {
+            const resposne = await getDetailUser(userSession._id, accessToken);
+            setUser(resposne);
+            setEmail(resposne.email);
+            setFullName(resposne.fullName);
+            setPhone(resposne.phone);
+            setSelectedAddress(resposne.address[0])
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
     const handleAddressChange = (event) => {
         const selectedId = event.target.value;
         const selectedAddr = user.address.find(addr => addr._id === selectedId);
@@ -91,9 +108,8 @@ const CheckoutPage = () => {
         }
     }
 
-
     // console.log('selectedAddress',selectedAddress);
-    
+    console.log(user)
 
     return( 
         <div className="margin-component mt-[31px] flex flex-col gap-5">
@@ -163,7 +179,7 @@ const CheckoutPage = () => {
                                 className="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 onChange={handleAddressChange}
                                 >
-                                    {user.address.map(addr => (
+                                    {user?.address.map(addr => (
                                         <option key={addr._id} value={addr._id}>{`${addr.street}, ${addr.city}, ${addr.province}`}</option>
                                     ))}
                             </select>
@@ -217,7 +233,7 @@ const CheckoutPage = () => {
                     {selectedPaymentMethod === "COD" ? (
                         <button type="button" onClick={handleDirectPayment} className="w-full h-1/6 bg-rose-500 p-2 text-white rounded-lg hover:bg-rose-800">Order</button>
                     ) : (
-                        <div>
+                        <div className="w-full h-1/6">
                            <Paypal 
                                 amount={total} 
                                 payload={{

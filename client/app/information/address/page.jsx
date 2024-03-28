@@ -1,19 +1,35 @@
 'use client'
 import Link from "next/link";
-import { useSelector, useDispatch  } from "react-redux";
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-import { removeAddress } from "@/app/api/route";
+import { getAllAddressUser, removeAddress } from "@/app/api/route";
+import { useEffect, useState } from "react";
 
 
 const Address = () => {
-    const user = useSelector(state => state.auth.user);
-    const accessToken = useSelector(state => state.auth.accessToken);
-    const dispatch = useDispatch();
+    // const user = useSelector(state => state.auth.user);
+    // const accessToken = useSelector(state => state.auth.accessToken);
+    const userString = sessionStorage.getItem('user');
+    const user = JSON.parse(userString)
+    const accessToken = sessionStorage.getItem('accessToken');
+    const [address, setAddress] = useState([]);
     
     // console.log(user);
+    const fetchAllAddressForUser = async() => {
+        try {
+            const data = await getAllAddressUser(accessToken);
+            setAddress(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    useEffect(() => {
+        fetchAllAddressForUser();
+    }, []);
+
+    console.log(user);
     const handleRemoveAddress = (id) => {
         Swal.fire({
             title: "Are you sure?",
@@ -26,12 +42,13 @@ const Address = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await removeAddress(id, accessToken, dispatch);
+                    await removeAddress(id, accessToken);
                     Swal.fire({
                         title: "Deleted!",
                         text: "Your address has been deleted.",
                         icon: "success"
                     });
+                    window.location.reload();
                 } catch (error) {
                     console.log(error)
                     Swal.fire({
@@ -47,7 +64,7 @@ const Address = () => {
     return ( 
         <div className="flex flex-col gap-5 px-5 w-full h-full">
             <Link href={'/information/address/newAddress'} className="bg-[#ff9b49] text-white px-2 py-1.5 rounded-3xl w-1/6 font-semibold text-center">New Address</Link>
-            {user?.address && user?.address.length > 0 ? (
+            {address && address.length > 0 ? (
                 <table className="table-auto border-4 w-full h-1/2">
                     <thead className="border-2 bg-slate-200 text-xl font-semibold text-center">
                         <tr className="w-full">
@@ -58,7 +75,7 @@ const Address = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {user.address.map(add => (
+                        {address.map(add => (
                             <tr className="w-full" key={add._id}>
                                 <td className="border-2 ">{add.street}</td>
                                 <td className="border-2 text-center">{add.city}</td>
@@ -80,7 +97,7 @@ const Address = () => {
                     </tbody>
                 </table>
             ) : (
-                <div>No Address</div>
+                <div>No Address...</div>
             )}
         </div>
     );

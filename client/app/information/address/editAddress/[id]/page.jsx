@@ -1,30 +1,46 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { updateAddr } from '@/app/api/route';
+import { getDetailAddress, updateAddr } from '@/app/api/route';
 import { useDispatch, useSelector } from 'react-redux';
 
 const editAddress = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const { id } = useParams();
-    const user = useSelector(state => state.auth.user);
-    const accessToken = useSelector(state => state.auth.accessToken);
-    const index = user.address.findIndex(addr => addr._id === id);
-    const [street, setStreet] = useState(user.address[index].street);
-    const [city, setCity] = useState(user.address[index].city);
-    const [province, setProvince] = useState(user.address[index].province);
+    const userString = sessionStorage.getItem('user');
+    const user = JSON.parse(userString)
+    const accessToken = sessionStorage.getItem('accessToken');
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [province, setProvince] = useState('');
+
+
+    const getDetailAddr = async() => {
+        try {
+            const data = await getDetailAddress(id, accessToken);
+            setStreet(data.street);
+            setCity(data.city);
+            setProvince(data.province);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getDetailAddr();
+    }, [])
 
     const handleAupdateAddress = async(e) => {
         e.preventDefault();
         try {
             const data = { street, city, province };
-            await updateAddr(data, id, accessToken, dispatch);
+            await updateAddr(data, id, accessToken);
+            router.push('/information/address');
         } catch (error) {
             console.log(error)
         }
-        router.push('/information/address');
     }
 
     return ( 

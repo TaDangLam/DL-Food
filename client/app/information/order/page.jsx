@@ -6,7 +6,7 @@ import { getAllOrderUser } from "@/app/api/route";
 import { useSelector } from "react-redux";
 
 const Order = () => {
-    const accessToken = useSelector(state => state.auth.accessToken);
+    const accessToken = sessionStorage.getItem('accessToken');
     const [orders, setOrders] = useState([]);
     
     const border1 = 'border border-slate-300';
@@ -23,7 +23,7 @@ const Order = () => {
 
     useEffect(() => {
         getOrderUser(accessToken);
-    }, [accessToken])
+    }, [])
 
     const renderIsPaid = (isPaid) => {
         return isPaid ? "Yes" : "No";

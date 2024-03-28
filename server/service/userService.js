@@ -32,7 +32,7 @@ const userService = {
     },
     getDetailUser: async(id) => {
         try {
-            const checkUser = await User.findById(id);
+            const checkUser = await User.findById(id).populate('address');
             if (!checkUser){
                 return {
                     status: 'OK',

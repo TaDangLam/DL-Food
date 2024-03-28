@@ -3,16 +3,17 @@ import { useRouter } from 'next/navigation'
 import { useState } from "react";
 
 import { addAddress } from '@/app/api/route';
-import { useDispatch, useSelector } from 'react-redux';
 
 const newAddress = () => {
+    // const user = useSelector(state => state.auth.user);
+    // const accessToken = useSelector(state => state.auth.accessToken);
+    const userString = sessionStorage.getItem('user');
+    const user = JSON.parse(userString)
+    const accessToken = sessionStorage.getItem('accessToken');
     const [street, setStreet] = useState('');
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
     const router = useRouter();
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user);
-    const accessToken = useSelector(state => state.auth.accessToken);
     const userId = user._id;
 
 
@@ -20,13 +21,18 @@ const newAddress = () => {
         e.preventDefault();
         try {
             const data = { street, city, province };
-            await addAddress(data, userId, accessToken, dispatch);
+            await addAddress(data, userId, accessToken);
+            // const updatedUser = {
+            //     ...user,
+            //     address: [...user.address, response.data._id] // Thêm địa chỉ mới vào mảng address của user
+            // };
+            // sessionStorage.setItem('user', JSON.stringify(updatedUser));
+            router.push('/information/address');
         } catch (error) {
             console.log(error)
         }
-        router.push('/information/address');
     }
-
+    console.log(user)
     return ( 
         <div className="flex flex-col gap-5 px-2 w-full h-full">
             <div className=" w-full h-1/6 px-3 text-xl font-semibold">New Address</div>

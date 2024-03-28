@@ -168,7 +168,7 @@ export const getAllUser = async(accessToken) => {
         });
         return response.data.data;
     } catch (error) {
-        console.log('Login error: ', error.response.data.error);
+        console.log('Get All User error: ', error);
         throw error;
     }
 }
@@ -182,7 +182,21 @@ export const getAllStaff = async(accessToken) => {
         });
         return response.data.data;
     } catch (error) {
-        console.log('Get All Staff error: ', error.response.data.error);
+        console.log('Get All Staff error: ', error);
+        throw error;
+    }
+}
+
+export const getDetailUser = async(id, accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/user/get-detail-user/${id}`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Get Detail User error: ', error);
         throw error;
     }
 }
@@ -197,7 +211,7 @@ export const login = async(username, password, dispatch) => {
         dispatch(Login({ data, accessToken, refreshToken }));
         return response.data.data.role;
     } catch (error) {
-        console.log('Login error: ', error.response.data.error);
+        console.log('Login error: ', error);
         throw error;
     }
 }
@@ -215,7 +229,7 @@ export const register = async(newUser) => {
         });
         return response.data.data
     } catch (error) {
-        console.log('Register error: ', error.response.data.error);
+        console.log('Register error: ', error);
         throw error;
     }
 }
@@ -250,7 +264,7 @@ export const deleteUser = async(id, accessToken) => {
         });
         return response.data.message;
     } catch (error) {
-        console.log('Delte User error: ', error.response.data.error);
+        console.log('Delte User error: ', error);
         throw error;
     }
 }
@@ -261,24 +275,48 @@ export const logout = (dispatch) => {
 
 
 // ---------------------------- Address  -----------------------------
-export const addAddress = async(data, userId, accessToken, dispatch) => {
+export const getAllAddressUser = async(accessToken) => {
     try {
-        const { street, city, province } = data;
-        const response = await axios.post(`${baseUrl}/address/add-address/${userId}`, { street, city, province }, {headers: {'token': `Bearer ${accessToken}` }});
-        dispatch(addNewAddress(response.data.data));
+        const response = await axios.get(`${baseUrl}/address`, {headers: {'token': `Bearer ${accessToken}` }});
+        // dispatch(addNewAddress(response.data.data));
+        return response.data.data;
     } catch (error) {
-        console.log('Update Address error: ', error.response.data.error);
+        console.log('Get All Address error: ', error);
         throw error;
     }
 }
 
-export const updateAddr = async(data, addressId, accessToken, dispatch) => {
+export const getDetailAddress = async(id, accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/address/get-detail/${id}`, {headers: {'token': `Bearer ${accessToken}` }});
+        // dispatch(addNewAddress(response.data.data));
+        return response.data.data;
+    } catch (error) {
+        console.log('Get All Address error: ', error);
+        throw error;
+    }
+}
+
+export const addAddress = async(data, userId, accessToken) => {
+    try {
+        const { street, city, province } = data;
+        const response = await axios.post(`${baseUrl}/address/add-address/${userId}`, { street, city, province }, {headers: {'token': `Bearer ${accessToken}` }});
+        // dispatch(addNewAddress(response.data.data));
+        return response.data.data;
+    } catch (error) {
+        console.log('Add Address error: ', error);
+        throw error;
+    }
+}
+
+export const updateAddr = async(data, addressId, accessToken) => {
     try {
         const { street, city, province } = data;
         const response = await axios.patch(`${baseUrl}/address/update-address/${addressId}`, { street, city, province }, {headers: {'token': `Bearer ${accessToken}` }});
-        dispatch(updateAddress(response.data.data));
+        // dispatch(updateAddress(response.data.data));
+        return response.data.data;
     } catch (error) {
-        console.log('Update Address error: ', error.response.data.error);
+        console.log('Update Address error: ', error);
         throw error;
     }
 }
@@ -286,10 +324,11 @@ export const updateAddr = async(data, addressId, accessToken, dispatch) => {
 export const removeAddress = async(addressId, accessToken, dispatch) => {
     try {
         const response = await axios.delete(`${baseUrl}/address/delete-address/${addressId}`, {headers: {'token': `Bearer ${accessToken}` }});
-        dispatch(deleteAddress(addressId));
+        // dispatch(deleteAddress(addressId));
+        return response.data.data;
         // console.log(response.data.message);
     } catch (error) {
-        console.log('Update Address error: ', error.response.data.error);
+        console.log('Remove Address error: ', error);
         throw error;
     }
 }
@@ -311,7 +350,7 @@ export const getAllOrderUser = async(accessToken) => {
         const response = await axios.get(`${baseUrl}/order/get-all-order-user`, {headers: {'token': `Bearer ${accessToken}` }});
         return(response.data.data);
     } catch (error) {
-        console.log('Get All Order User error: ', error.response.data.error);
+        console.log('Get All Order User error: ', error);
         throw error;
     }
 }
@@ -321,7 +360,7 @@ export const getOrderDetail = async(id, accessToken) => {
         const response = await axios.get(`${baseUrl}/order/get-detail-order/${id}`, {headers: {'token': `Bearer ${accessToken}` }});
         return(response.data.data);
     } catch (error) {
-        console.log('Get All Order User error: ', error.response.data.error);
+        console.log('Get All Order User error: ', error);
         throw error;
     }
 }
@@ -334,7 +373,7 @@ export const createOrder = async(data, accessToken) => {
         {headers: {'token': `Bearer ${accessToken}` }});
         return(response.data.data);
     } catch (error) {
-        console.log('Create Order error: ', error.response.data.error);
+        console.log('Create Order error: ', error);
         throw error;
     }
 }

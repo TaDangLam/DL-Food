@@ -6,8 +6,11 @@ import Swal from "sweetalert2";
 import { updateUser } from "../api/route";
 
 const Information = () => {
-    const user = useSelector(state => state.auth.user);
-    const accessToken = useSelector(state => state.auth.accessToken);
+    // const user = useSelector(state => state.auth.user);
+    // const accessToken = useSelector(state => state.auth.accessToken);
+    const userString = sessionStorage.getItem('user');
+    const user = JSON.parse(userString)
+    const accessToken = sessionStorage.getItem('accessToken');
     const dispatch = useDispatch();
     const [email, setEmail] = useState(user?.email);
     const [fullName, setFullName] = useState(user?.fullName);
@@ -15,12 +18,8 @@ const Information = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [phone, setPhone] = useState(user?.phone);
     
-    // useEffect(() => {
-    //   setEmail(user.email);
-    //   setPhone(user.phone);
-    // }, [user]);
     
-    console.log(user);
+    // console.log(user);
 
     const UpdateInfo = async(e) => {
       e.preventDefault();
