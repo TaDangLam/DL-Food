@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BsCurrencyDollar } from "react-icons/bs";
 import { MdOutlineBorderColor } from "react-icons/md";
-import { RxUpdate } from "react-icons/rx";
-import { RiDeleteBinLine } from "react-icons/ri";
 
 // import Spinner1 from "@/components/spinner1";
 import { getAllOrderAdmin } from "@/app/api/route";
@@ -50,17 +48,13 @@ const OrderPage = () => {
         });
     }
 
-    const renderIsPaid = (isPaid) => {
-        return isPaid ? "Yes" : "No";
-    };
-
     return (
         <div className="flex flex-col">
             {loading ? (
                 <div className="text-center py-40"><Spinner1 /></div>
             ) : (
                 <div className="w-full h-full">
-                    <div className="text-[#4b6cb7] text-3xl font-bold w-full h-1/6">User</div>
+                    <div className="text-[#4b6cb7] text-3xl font-bold w-full h-1/6">Order</div>
                     <table className={`table-auto border-collapse ${border1} w-full h-5/6 mt-5`}>
                         <thead>
                             <tr className="bg-[#4b6cb7] text-white text-center">
@@ -78,17 +72,17 @@ const OrderPage = () => {
                         <tbody>
                             {orders.map((order, index) => (
                                 <tr key={order._id} className="">
-                                    <td className={`${border1} pl-2 text-center w-1/12`}>{index + 1}</td>
-                                    <td className={`${border1} pl-2 w-2/12`}>{order.orderBy?.name}</td>
-                                    <td className={`${border1} pl-2 w-3/12`}>{order._id}</td>
+                                    <td className={`${border1} pl-2 text-center`}>{index + 1}</td>
+                                    <td className={`${border1} pl-2`}>{order.orderBy?.name}</td>
+                                    <td className={`${border1} pl-2`}>{order._id}</td>
                                     {/* <td className={`${border1} pl-2`}>{order.paymentType}</td>
                                     <td className={`${border1} pl-2 text-center`}>{renderIsPaid(order.isPaid)}</td> */}
-                                    <td className={`${border1} pl-2 text-center w-2/12`}>
+                                    <td className={`${border1} pl-2 text-center`}>
                                         {format(new Date(order.createdAt), 'HH:mm dd-MM-yyyy')}
                                     </td>
-                                    <td className={`${border1} pl-2 w-1/12`}>{order.status}</td>
-                                    <td className={`${border1} pl-2 flex items-center justify-center h-full w-3/12`}><span className="text-btn text-lg font-semibold">{order.totalPrice}</span> <BsCurrencyDollar/></td>
-                                    <td className={`${border1} p-2 w-1/12`}>
+                                    <td className={`${border1} pl-2`}>{order.status}</td>
+                                    <td className={`${border1} pl-2 flex items-center justify-center h-full`}><span className="text-btn text-lg font-semibold">{order.totalPrice}</span> <BsCurrencyDollar/></td>
+                                    <td className={`${border1} p-2`}>
                                         <Link className="flex items-center  gap-2 bg-slate-300 p-1 rounded-lg hover:bg-lime-700 hover:text-white" href={`/dashboard/order/${order._id}`}><MdOutlineBorderColor/>Detail</Link>
                                     </td>
                                 </tr>

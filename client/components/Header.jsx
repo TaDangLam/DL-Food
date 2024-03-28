@@ -16,7 +16,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     
-    console.log(user);
+    // console.log(user);
     return(
         <div className='margin-component h-full'>
             <div className="flex w-full h-1/2 pt-2">

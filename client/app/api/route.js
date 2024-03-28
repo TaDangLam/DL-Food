@@ -173,6 +173,20 @@ export const getAllUser = async(accessToken) => {
     }
 }
 
+export const getAllStaff = async(accessToken) => {
+    try {
+        const response = await axios.get(`${baseUrl}/user/get-all-staff`, {
+            headers: {
+                'token': `Bearer ${accessToken}`
+            }
+        });
+        return response.data.data;
+    } catch (error) {
+        console.log('Get All Staff error: ', error.response.data.error);
+        throw error;
+    }
+}
+
 export const login = async(username, password, dispatch) => {
     try {
         const response = await axios.post(`${baseUrl}/user/login`, {
@@ -236,7 +250,7 @@ export const deleteUser = async(id, accessToken) => {
         });
         return response.data.message;
     } catch (error) {
-        console.log('Login error: ', error.response.data.error);
+        console.log('Delte User error: ', error.response.data.error);
         throw error;
     }
 }

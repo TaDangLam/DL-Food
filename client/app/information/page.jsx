@@ -20,6 +20,8 @@ const Information = () => {
     //   setPhone(user.phone);
     // }, [user]);
     
+    console.log(user);
+
     const UpdateInfo = async(e) => {
       e.preventDefault();
         try {
