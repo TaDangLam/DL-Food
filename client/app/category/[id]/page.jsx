@@ -53,12 +53,14 @@ const Category = () => {
                             <option value="desc">Price: High to Low</option>
                         </select>
                     </div>
-                    <div className='grid grid-cols-3 grid-rows-3 gap-8 w-full h-4/6 pb-6'>
+                    <div className='grid grid-cols-3 grid-rows-3 gap-6 w-full h-4/6 pb-6'>
                         {currentProducts.map(product => (
-                            <Link href={`/productdetail/${product._id}`} className='relative flex flex-col gap-4 w-full h-full border p-5  hover:shadow-xl duration-300'>
-                                <div className='w-full'><img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${product.name}/${product.images[0]}`} alt="photo product" className='w-full h-full object-contain'/></div>
-                                <div className='w-full text-lg font-medium'>{product.name}</div>
-                                <div className='w-full text-[#ffc139] text-2xl font-semibold '><span className=''>$ {product.price}</span></div>
+                            <Link href={`/productdetail/${product._id}`} className='flex flex-col gap-4 w-full h-full border p-5  hover:shadow-xl duration-300'>
+                                <div className='w-full h-3/5'><img src={`${process.env.NEXT_PUBLIC_API_UPLOAD}/${product.name}/${product.images[0]}`} alt="photo product" className='w-full h-full object-contain'/></div>
+                                <div className='flex flex-col w-full h-2/5'>
+                                    <div className='w-full h-2/3 text-lg font-medium'>{product.name}</div>
+                                    <div className='w-full h-1/3 text-[#ffc139] text-2xl font-semibold '><span className=''>$ {product.price}</span></div>
+                                </div>
                             </Link>
                         ))}
                     </div>

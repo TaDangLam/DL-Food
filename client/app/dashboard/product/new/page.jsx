@@ -72,7 +72,7 @@ const newProduct = () => {
           console.error('Error creating product:', error);
           Swal.fire({
               icon: 'error',
-              text: 'An error occurred while creating the product!',
+              text: `${error.response.data.message}`,
           });
       }
     }
